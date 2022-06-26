@@ -1,0 +1,14 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <title>Online Banking</title>
+</head>
+<body>
+<h1>Home Page</h1>
+<a href="/logout">Logout</a>
+
+<div th:if="${admin=='true'}">
+    <a href="/adm">Admin Panel</a>
+</div>
+</body>
+</html>
