@@ -3,9 +3,11 @@
 <body>
 <h1>Login</h1>
 
+<!--
 <div th:if="${error == 'true'}">
     <h2>Error!</h2>
-</div>
+</div>-->
+<div class="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
 <div th:if="${registered == 'true'}">
     <h2>You registered successfully. You can enter your credentials now:</h2>
 </div>

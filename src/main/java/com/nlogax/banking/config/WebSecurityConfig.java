@@ -46,13 +46,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .failureUrl("/login?error=true")    //todo make it working without =true
                 .permitAll()
                 .successForwardUrl("/")
                 .and()
                 .logout()
                 //.logoutSuccessUrl("/login?logout=true") //todo doesnt work
-
                 ;
     }
 }
