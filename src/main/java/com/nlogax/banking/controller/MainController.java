@@ -1,5 +1,6 @@
 package com.nlogax.banking.controller;
 
+import com.nlogax.banking.model.User;
 import com.nlogax.banking.service.UserService;
 import com.nlogax.banking.web.dto.UserRegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,13 @@ public class MainController extends WebMvcConfigurerAdapter {
     @RequestMapping("/")
     public String showMainPage (Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            model.addAttribute("admin", "true");
+        if (auth != null) {
+            if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) model.addAttribute("admin", "true");
+            // fixme todo auth.getPricipal() returns Stirng, something to do
+            //  with CustomAuthProvider need setting it's own principal
+            model.addAttribute("firstName", auth.getName());
         }
+
         return "index";
     }
 

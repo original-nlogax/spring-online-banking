@@ -32,6 +32,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         String name = authentication.getName();
         String password = authentication.getCredentials().toString();
+        System.out.println("Trying to log in with name=["+name+"], pass=["+password+"]...");
 
         // if we didn't write custom auth provider then we'd write complex
         // sql queries which isn't probably good by hibernate standard

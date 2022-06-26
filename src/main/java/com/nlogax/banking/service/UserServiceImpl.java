@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(UserRegistrationDto registrationDto) {
-        boolean isAdmin = registrationDto.getEmail().equals("admin");
+        boolean isAdmin = registrationDto.getEmail().equals("123");
 
         // untested
         List<Role> roles = new ArrayList<>();
