@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class MainController extends WebMvcConfigurerAdapter {
 
@@ -26,6 +29,7 @@ public class MainController extends WebMvcConfigurerAdapter {
         return "adm";
     }
 
+
     @RequestMapping("/")
     public String showMainPage (Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -35,14 +39,31 @@ public class MainController extends WebMvcConfigurerAdapter {
         return "index";
     }
 
+    /*
+    @RequestMapping(value = {"/logout"})
+    public String logout(HttpServletRequest request) {
+        SecurityContextHolder.clearContext();
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/login?logout=true";
+    }*/
+
+    // todo attribute vs parameter
     @RequestMapping("/login")
-    public String showLoginPage (Model model,
+    public String showLoginPage (Model model, HttpServletRequest request,
                                  @RequestParam(value = "error", required = false) String error,
-                                 @RequestParam(value = "registered", required = false) String registered,
+                                 @ModelAttribute(value = "registered") String registered,
                                  @RequestParam(value = "logout", required = false) String logout) {
         model.addAttribute("error", error);
-        model.addAttribute("registered", registered);
         model.addAttribute("logout", logout);
+
+        //model.addAttribute("registered", registered);
+        // greyed out because ModelAttribute docs:
+        // the argument’s fields should be populated (automatically)
+        // from all request parameters that have matching names."
+
         return "login";
     }
 
@@ -54,8 +75,9 @@ public class MainController extends WebMvcConfigurerAdapter {
     }
 
     @PostMapping("/user/new")
-    public String register (RedirectAttributes redirectAttributes, @ModelAttribute("userData") UserRegistrationDto data) {  // todo validation
-        redirectAttributes.addAttribute("registration", "true");
+    public String register (RedirectAttributes ra,
+                            @ModelAttribute("userData") UserRegistrationDto data) {  // todo validation
+        ra.addFlashAttribute("registered", "true");
         userService.save(data);
         return "redirect:/login";
     }

@@ -6,6 +6,7 @@ import com.nlogax.banking.repository.UserRepository;
 import com.nlogax.banking.web.dto.UserRegistrationDto;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,11 +21,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(UserRegistrationDto registrationDto) {
-        // TODO bloat
-        List<Role> roles;
         boolean isAdmin = registrationDto.getEmail().equals("admin");
-        if (!isAdmin) roles = Collections.singletonList(new Role("ROLE_USER"));
-        else roles = List.of(new Role("ROLE_ADMIN"), new Role("ROLE_USER"));
+
+        // untested
+        List<Role> roles = new ArrayList<>();
+        if (isAdmin) roles.add(new Role("ROLE_ADMIN"));
+        roles.add(new Role("ROLE_USER"));
 
         User user = new User(registrationDto.getFirstName(),
                 registrationDto.getLastName(), registrationDto.getEmail(),
