@@ -1,4 +1,4 @@
-package com.nlogax.banking;
+package com.nlogax.banking.security;
 
 import com.nlogax.banking.model.Role;
 import com.nlogax.banking.model.User;
@@ -9,6 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -40,8 +41,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         List<User> users = repo.findByEmail(name);
         if (users.size() > 0) {
             User user = users.get(0);
+            
             //if (encoder.matches(password, user.get(0).getPassword())) {
-
             if (password.equals(user.getPassword())) {
                 Collection<Role> roles = user.getRoles();
                 List<GrantedAuthority> authorities = new ArrayList<>();
@@ -50,7 +51,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 System.out.println("User [" + user.getEmail() + "] has logged in with roles: [" +
                         authorities.stream().map(Object::toString).reduce("", String::concat) + "]");   // TODO separate by comma
 
-                return new UsernamePasswordAuthenticationToken(name, password, authorities);
+                return new UsernamePasswordAuthenticationToken(user, password, authorities);
             } else {
                 throw new BadCredentialsException("Invalid password");
             }

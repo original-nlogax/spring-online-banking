@@ -35,9 +35,12 @@ public class MainController extends WebMvcConfigurerAdapter {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) model.addAttribute("admin", "true");
-            // fixme todo auth.getPricipal() returns Stirng, something to do
-            //  with CustomAuthProvider need setting it's own principal
-            model.addAttribute("firstName", auth.getName());
+            User user = (User) auth.getPrincipal();
+
+            System.out.println(user.getFirstName());
+            model.addAttribute("firstName", user.getFirstName());
+            model.addAttribute("lastName", user.getLastName());
+            model.addAttribute("email", user.getEmail());
         }
 
         return "index";
