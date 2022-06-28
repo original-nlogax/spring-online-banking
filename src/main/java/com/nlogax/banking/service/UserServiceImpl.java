@@ -4,6 +4,7 @@ import com.nlogax.banking.model.Account;
 import com.nlogax.banking.model.Role;
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.repository.UserRepository;
+import com.nlogax.banking.utils.Utils;
 import com.nlogax.banking.web.dto.UserRegistrationDto;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,6 @@ public class UserServiceImpl implements UserService {
     public User save(UserRegistrationDto registrationDto) {
         boolean isAdmin = registrationDto.getEmail().equals("123");
 
-        // untested
         List<Role> roles = new ArrayList<>();
         if (isAdmin) roles.add(new Role("ROLE_ADMIN"));
         roles.add(new Role("ROLE_USER"));
@@ -38,8 +38,9 @@ public class UserServiceImpl implements UserService {
             accounts.add(ac);
         }
 
-        User user = new User(registrationDto.getFirstName(),
-                registrationDto.getLastName(), registrationDto.getEmail(), registrationDto.getPhoneNumber(),
+        User user = new User(
+                Utils.capitalizeFirstLetter(registrationDto.getFirstName()),
+                Utils.capitalizeFirstLetter(registrationDto.getLastName()), registrationDto.getEmail(), registrationDto.getPhoneNumber(),
                 registrationDto.getPassword(), roles, accounts);
 
         System.out.println("Saving new user [" + registrationDto.getEmail() + "] (admin = " + isAdmin + ")");
