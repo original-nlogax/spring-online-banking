@@ -3,6 +3,8 @@ package com.nlogax.banking.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -34,8 +36,12 @@ public class User {
                 inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // todo why does EAGER crashes?
-
+    //If you are like me in the initial days of learning and wrapping your head around the concept
+    // of using the @OneToMany annotation with the 'mappedBy' property, it also means that the other
+    // side holding the @ManyToOne annotation with the @JoinColumn is the 'owner'
+    // of this bi-directional relationship.
+    @Fetch(value = FetchMode.SUBSELECT) // bug: https://stackoverflow.com/a/8309458
+    @OneToMany(targetEntity=com.nlogax.banking.model.Account.class, mappedBy = "user", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)  // todo why does EAGER crashes?
     private Collection<Account> accounts;
 
 

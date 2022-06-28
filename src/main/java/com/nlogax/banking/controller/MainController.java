@@ -37,12 +37,15 @@ public class MainController extends WebMvcConfigurerAdapter {
             if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) model.addAttribute("admin", "true");
             User user = (User) auth.getPrincipal();
 
-            System.out.println(user.getFirstName());
+            //model.addAttribute("user", user); // fixme crash
+            System.out.println(user.getAccounts());
+
             model.addAttribute("firstName", user.getFirstName());
             model.addAttribute("lastName", user.getLastName());
             model.addAttribute("email", user.getEmail());
             model.addAttribute("password", user.getPassword());
             model.addAttribute("phoneNumber", user.getPhoneNumber());
+            model.addAttribute("accounts", user.getAccounts());
         }
 
         return "index";

@@ -31,20 +31,20 @@ public class UserServiceImpl implements UserService {
         roles.add(new Role("ROLE_USER"));
 
         List<Account> accounts = new ArrayList<>();
-        int number = new Random().nextInt(4)+1;
-        for (int i = 0; i < number; i++) {
-            Account ac = new Account("Card " + i);
-            ac.setBalance(new Random().nextFloat(50000f));
-            accounts.add(ac);
-        }
 
         User user = new User(
                 Utils.capitalizeFirstLetter(registrationDto.getFirstName()),
                 Utils.capitalizeFirstLetter(registrationDto.getLastName()), registrationDto.getEmail(), registrationDto.getPhoneNumber(),
                 registrationDto.getPassword(), roles, accounts);
 
-        System.out.println("Saving new user [" + registrationDto.getEmail() + "] (admin = " + isAdmin + ")");
+        int number = new Random().nextInt(4)+1;
+        for (int i = 0; i < number; i++) {
+            Account ac = new Account(user, "Account " + (i+1));
+            ac.setBalance(new Random().nextFloat(50000f));
+            accounts.add(ac);
+        }
 
+        System.out.println("Saving new user [" + registrationDto.getEmail() + "] (admin = " + isAdmin + ")");
         return userRepository.save(user);
     }
 

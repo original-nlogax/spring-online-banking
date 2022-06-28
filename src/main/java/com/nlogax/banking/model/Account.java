@@ -20,12 +20,13 @@ public class Account {
     private String name;
     private float balance;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // todo why does EAGER crashes?
-    @JoinColumn(name="user_id")
+    //@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // todo why does EAGER crashes?
+    @ManyToOne
     private User user;
 
-    public Account(String name) {
+    public Account(User user, String name) {
         super();   //fixme
+        this.user = user;
         this.name = name;
     }
 }
