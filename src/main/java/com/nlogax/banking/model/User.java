@@ -24,6 +24,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+    private String phoneNumber;
     private String password;
     private boolean enabled;
 
@@ -39,11 +40,12 @@ public class User {
 
 
     // ? maybe autogenerate
-    public <T> User(String firstName, String lastName, String email, String password, List<Role> roles, List<Account> accounts) {
+    public <T> User(String firstName, String lastName, String email, String password, String phoneNumber, List<Role> roles, List<Account> accounts) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.phoneNumber = phoneNumber;
         this.roles = roles;
         this.accounts = accounts;
         enabled = true;

@@ -41,6 +41,8 @@ public class MainController extends WebMvcConfigurerAdapter {
             model.addAttribute("firstName", user.getFirstName());
             model.addAttribute("lastName", user.getLastName());
             model.addAttribute("email", user.getEmail());
+            model.addAttribute("password", user.getPassword());
+            model.addAttribute("phoneNumber", user.getPhoneNumber());
         }
 
         return "index";

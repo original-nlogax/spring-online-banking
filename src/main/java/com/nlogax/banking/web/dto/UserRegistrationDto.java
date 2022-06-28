@@ -11,13 +11,6 @@ public class UserRegistrationDto {
     private String firstName;
     private String lastName;
     private String email;
+    private String phoneNumber;
     private String password;
-
-    @Override
-    public String toString() {
-        return "First name: " + firstName +
-                "\nLast name: " + lastName +
-                "\nEmail: " + email +
-                "\nPassword: " + password;
-    }
 }

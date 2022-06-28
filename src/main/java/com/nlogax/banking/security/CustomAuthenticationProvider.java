@@ -41,22 +41,24 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         List<User> users = repo.findByEmail(name);
         if (users.size() > 0) {
             User user = users.get(0);
-            
+
             //if (encoder.matches(password, user.get(0).getPassword())) {
             if (password.equals(user.getPassword())) {
-                Collection<Role> roles = user.getRoles();
-                List<GrantedAuthority> authorities = new ArrayList<>();
-                roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
 
+                // todo  List<GrantedAuthority> -- why type mismatch?
+                List<SimpleGrantedAuthority> authorities =
+                        user.getRoles().stream().map(r -> new SimpleGrantedAuthority(r.getName())).toList();
+                
                 System.out.println("User [" + user.getEmail() + "] has logged in with roles: [" +
                         authorities.stream().map(Object::toString).reduce("", String::concat) + "]");   // TODO separate by comma
 
-                return new UsernamePasswordAuthenticationToken(user, password, authorities);
+                //return new UsernamePasswordAuthenticationToken(user, password, authorities);
+                return new UsernamePasswordAuthenticationToken(user, null, authorities);
             } else {
                 throw new BadCredentialsException("Invalid password");
             }
         } else {
-            throw new BadCredentialsException("No user registered with this details");
+            throw new BadCredentialsException("No user registered with this email");
         }
     }
 

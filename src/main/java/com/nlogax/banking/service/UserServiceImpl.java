@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = new User(registrationDto.getFirstName(),
-                registrationDto.getLastName(), registrationDto.getEmail(),
+                registrationDto.getLastName(), registrationDto.getEmail(), registrationDto.getPhoneNumber(),
                 registrationDto.getPassword(), roles, accounts);
 
         System.out.println("Saving new user [" + registrationDto.getEmail() + "] (admin = " + isAdmin + ")");
