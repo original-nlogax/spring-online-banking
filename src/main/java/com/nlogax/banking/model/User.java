@@ -40,7 +40,7 @@ public class User {
 
 
     // ? maybe autogenerate
-    public <T> User(String firstName, String lastName, String email, String password, String phoneNumber, List<Role> roles, List<Account> accounts) {
+    public <T> User(String firstName, String lastName, String email, String phoneNumber, String password, List<Role> roles, List<Account> accounts) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
