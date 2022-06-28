@@ -34,18 +34,11 @@ public class MainController extends WebMvcConfigurerAdapter {
     public String showMainPage (Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
-            if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) model.addAttribute("admin", "true");
             User user = (User) auth.getPrincipal();
 
-            //model.addAttribute("user", user); // fixme crash
-            System.out.println(user.getAccounts());
-
-            model.addAttribute("firstName", user.getFirstName());
-            model.addAttribute("lastName", user.getLastName());
-            model.addAttribute("email", user.getEmail());
-            model.addAttribute("password", user.getPassword());
-            model.addAttribute("phoneNumber", user.getPhoneNumber());
-            model.addAttribute("accounts", user.getAccounts());
+            if (user.getRoles().stream().anyMatch(a -> a.getName().equals("ROLE_ADMIN")))
+                model.addAttribute("isAdmin", "true");
+            model.addAttribute("user", user);
         }
 
         return "index";

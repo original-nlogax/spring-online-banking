@@ -64,6 +64,18 @@
             box-shadow: none!important;
         }
 
+        .card-container > .btn.active.focus,
+        .btn.active:focus,
+        .btn.focus,
+        .btn:active.focus,
+        .btn:active:focus,
+        .btn:focus {
+            outline: 0;
+            outline-color: transparent;
+            outline-width: 0;
+            outline-style: none;
+            box-shadow: 0 0 0 0 rgba(0,123,255,0);
+        }
 	</style>
 </head>
 <body class="bg-gray-300">
@@ -142,11 +154,11 @@
 												<div class="d-flex flex-column align-items-center text-center">
 													<img src="https://thumbs.dreamstime.com/b/cute-cat-portrait-square-photo-beautiful-white-closeup-105311158.jpg" alt="Admin" class="rounded-circle" width="150">
 													<div class="mt-3">
-														<h4><span th:text="${firstName}"/> <span th:text="${lastName}"/></h4>
-														<p class="text-secondary mb-1">Full Stack Developer</p>
+														<h4><span th:text="${user.getFirstName()} + ${user.getLastName()}"/></h4>
+														<p class="text-secondary mb-1">Customer</p>
 														<p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
 
-														<a href="/adm" class="btn btn-info" th:if="${admin=='true'}">Admin panel</a>
+														<a href="/adm" class="btn btn-info" th:if="${isAdmin=='true'}">Admin panel</a>
 														<a href="/logout" class="btn btn-outline-primary">Logout</a>
 
 													</div>
@@ -163,7 +175,7 @@
 														<h6 class="mb-0">Full Name</h6>
 													</div>
 													<div class="col-sm-9 text-secondary">
-														<span th:text="${firstName}"/> <span th:text="${lastName}"/>
+														<span th:text="${user.getFirstName()} + ${user.getLastName()}"/>
 													</div>
 												</div>
 												<hr>
@@ -172,7 +184,7 @@
 														<h6 class="mb-0">Email</h6>
 													</div>
 													<div class="col-sm-9 text-secondary">
-														<span th:text="${email}"/>
+														<span th:text="${user.getEmail()}"/>
 													</div>
 												</div>
 												<hr>
@@ -181,13 +193,13 @@
 														<h6 class="mb-0">Phone number</h6>
 													</div>
 													<div class="col-sm-9 text-secondary">
-														<span th:text="${phoneNumber}"/>
+														<span th:text="${user.getPhoneNumber()}"/>
 													</div>
 												</div>
 												<hr>
 												<div class="row">
 													<div class="col-sm-12">
-														<a class="btn btn-info " target="__blank" href="">Edit</a>
+														<a class="btn btn-info" onclick="editUserData()">Edit</a>
 													</div>
 												</div>
 											</div>
@@ -210,7 +222,7 @@
 		</div>
 
 		<div class="mt-4 p-3 bg-white rounded">
-			<h2>Hello, <span th:text="${firstName}"></span></h2>
+			<h2>Hello, <span th:text="${user.getFirstName()}"></span></h2>
 			<h4>Accounts</h4>
 
 			<!-- accounts card deck -->
@@ -218,10 +230,21 @@
 			<div id="card-container" style="max-height: 250px">
 				<div class="container-fluid py-2">
 					<div class="d-flex flex-row flex-nowrap">
-						<div th:each="account : ${accounts}" class="card account card-body border-2 shadow rounded">
-							<p th:text="${account.getName()}">Card 1</p>
-							<p class="float-right text-success"><span th:text="${account.getBalance()}"></span> RUB</p>
+						<div th:each="account : ${user.getAccounts()}" class="card account card-body border-2 shadow rounded">
+							<p th:text="${account.getName()}"/>
+							<p th:text="${account.getFormattedNumber()}"/>
+							<span class="text-success" th:text="${account.getBalance()} + ' ' + ${account.getCurrency()}"/>
+							<!--<p class="text-success"><span th:text="${account.getBalance()}"/>  <span th:text="${account.getCurrency()}"/></p>-->
 						</div>
+						<button type="button" class="btn">
+							<div class="card account card-body border-2 shadow rounded">
+								<div class="d-flex justify-content-center">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+										<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+									</svg>
+								</div>
+							</div>
+						</button>
 					</div>
 				</div>
 			</div>

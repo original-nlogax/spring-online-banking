@@ -1,10 +1,12 @@
 package com.nlogax.banking.model;
 
+import com.nlogax.banking.utils.CreditCardNumberGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.nlogax.banking.model.User;
+import org.hibernate.type.CurrencyType;
 
 import javax.persistence.*;
 
@@ -19,14 +21,23 @@ public class Account {
     private Long id;
     private String name;
     private float balance;
+    private String currency;
+    private String number;
 
     //@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // todo why does EAGER crashes?
     @ManyToOne
     private User user;
 
-    public Account(User user, String name) {
+    public Account(User user, String name, String currency) {
         super();   //fixme
         this.user = user;
         this.name = name;
+        this.currency = currency;
+        number = new CreditCardNumberGenerator().generate("423", 16);
+        System.out.println("number = " + number);
+    }
+
+    public String getFormattedNumber () {
+        return "**** " + number.substring(number.length()-4);
     }
 }
