@@ -1,9 +1,13 @@
 package com.nlogax.banking.controller;
 
 import com.nlogax.banking.model.User;
+import com.nlogax.banking.service.AccountService;
 import com.nlogax.banking.service.UserService;
+import com.nlogax.banking.web.dto.AccountDto;
 import com.nlogax.banking.web.dto.UserRegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +27,8 @@ public class MainController extends WebMvcConfigurerAdapter {
     @Autowired
     UserService userService;
 
+    @Autowired
+    AccountService accountService;
 
     @RequestMapping("/adm")
     public String showAdminPanel () {
@@ -35,10 +41,10 @@ public class MainController extends WebMvcConfigurerAdapter {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             User user = (User) auth.getPrincipal();
+            model.addAttribute("user", user);
 
             if (user.getRoles().stream().anyMatch(a -> a.getName().equals("ROLE_ADMIN")))
                 model.addAttribute("isAdmin", "true");
-            model.addAttribute("user", user);
         }
 
         return "index";
@@ -93,4 +99,25 @@ public class MainController extends WebMvcConfigurerAdapter {
         userService.save(data);
         return "redirect:/login";
     }
+
+
+    /*
+    @PostMapping("/user/account/edit")
+    public ResponseEntity<?> editAccount (@ModelAttribute("accountDto") AccountDto data) {  // todo validation
+        accountService.save(data);
+        return new ResponseEntity(HttpStatus.OK);
+    }*/
+
+    @PostMapping("/user/account/edit")
+    public String editAccount (@ModelAttribute("accountDto") AccountDto data) {  // todo validation
+        accountService.save(data);
+        return "redirect:/";
+    }
+
+    /*
+    @PostMapping("/user/account/delete")
+    public String deleteAccount (@ModelAttribute("accountDto") AccountDto data) {  // todo validation
+        accountService.save(data);
+        return "redirect:/";
+    }*/
 }

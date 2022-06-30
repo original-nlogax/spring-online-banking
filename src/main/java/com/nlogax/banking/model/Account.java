@@ -37,6 +37,10 @@ public class Account {
         System.out.println("number = " + number);
     }
 
+    public Account(String name, String currency) {
+        this(null, name, currency);
+    }
+
     public String getFormattedNumber () {
         return "**** " + number.substring(number.length()-4);
     }

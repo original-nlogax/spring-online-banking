@@ -37,12 +37,13 @@ public class UserServiceImpl implements UserService {
                 Utils.capitalizeFirstLetter(registrationDto.getLastName()), registrationDto.getEmail(), registrationDto.getPhoneNumber(),
                 registrationDto.getPassword(), roles, accounts);
 
+        /*
         int number = new Random().nextInt(4)+1;
         for (int i = 0; i < number; i++) {
             Account ac = new Account(user, "Account " + (i+1), "RUB");
             ac.setBalance(new Random().nextFloat(50000f));
             accounts.add(ac);
-        }
+        }*/
 
         System.out.println("Saving new user [" + registrationDto.getEmail() + "] (admin = " + isAdmin + ")");
         return userRepository.save(user);
