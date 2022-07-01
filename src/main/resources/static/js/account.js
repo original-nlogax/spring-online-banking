@@ -1,9 +1,13 @@
 var currentEditAccountId;
 
-function openAccountEditModal (accountId, name, currency) {
+function openAccountEditModal (account, accountId, number, name, currency) {
     if (accountId === undefined) currentEditAccountId = -1;
     else currentEditAccountId = accountId;
 
+    console.log(account);
+
+
+    document.getElementById("accountEditNumber").innerHTML = number;
     document.getElementById("accountEditName").value = name;
     document.getElementById("accountEditCurrency").value = currency;
 

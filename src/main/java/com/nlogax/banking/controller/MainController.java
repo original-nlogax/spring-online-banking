@@ -35,7 +35,6 @@ public class MainController extends WebMvcConfigurerAdapter {
         return "adm";
     }
 
-
     @RequestMapping("/")
     public String showMainPage (Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -50,16 +49,34 @@ public class MainController extends WebMvcConfigurerAdapter {
         return "index";
     }
 
-    /*
-    @RequestMapping(value = {"/logout"})
-    public String logout(HttpServletRequest request) {
-        SecurityContextHolder.clearContext();
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
+    @RequestMapping("/payments")
+    public String showPaymentsPage (Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            User user = (User) auth.getPrincipal();
+            model.addAttribute("user", user);
+
+            if (user.getRoles().stream().anyMatch(a -> a.getName().equals("ROLE_ADMIN")))
+                model.addAttribute("isAdmin", "true");
         }
-        return "redirect:/login?logout=true";
-    }*/
+
+        return "payments";
+    }
+
+    @RequestMapping("/")
+    public String makeTransaction (Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            User user = (User) auth.getPrincipal();
+            model.addAttribute("user", user);
+
+            if (user.getRoles().stream().anyMatch(a -> a.getName().equals("ROLE_ADMIN")))
+                model.addAttribute("isAdmin", "true");
+        }
+
+        return "index";
+    }
+
 
     // todo attribute vs parameter
     @RequestMapping("/login")
@@ -101,23 +118,10 @@ public class MainController extends WebMvcConfigurerAdapter {
     }
 
 
-    /*
-    @PostMapping("/user/account/edit")
-    public ResponseEntity<?> editAccount (@ModelAttribute("accountDto") AccountDto data) {  // todo validation
-        accountService.save(data);
-        return new ResponseEntity(HttpStatus.OK);
-    }*/
-
     @PostMapping("/user/account/edit")
     public String editAccount (@ModelAttribute("accountDto") AccountDto data) {  // todo validation
         accountService.save(data);
         return "redirect:/";
     }
 
-    /*
-    @PostMapping("/user/account/delete")
-    public String deleteAccount (@ModelAttribute("accountDto") AccountDto data) {  // todo validation
-        accountService.save(data);
-        return "redirect:/";
-    }*/
 }

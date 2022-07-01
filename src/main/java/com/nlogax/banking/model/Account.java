@@ -41,7 +41,20 @@ public class Account {
         this(null, name, currency);
     }
 
+    public void deposit (float amount) {
+
+    }
+
+    public void withdraw (float amount) {
+
+    }
+
     public String getFormattedNumber () {
         return "**** " + number.substring(number.length()-4);
+    }
+
+    // todo use?
+    public String getHTML () {
+        return getFormattedNumber() + ' ' + name + " <span class='test-success'>(" + balance + " " + currency + " </span>";
     }
 }

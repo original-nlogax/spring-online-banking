@@ -93,10 +93,10 @@
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav">
 				<li class="nav-item active">
-					<a class="nav-link border-bottom border-2 border-success">Home</a>
+					<a class="nav-link" href="/">Home</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="/payments">Payments</a>
+					<a class="nav-link border-bottom border-2 border-success">Payments</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="#">History</a>
@@ -224,12 +224,12 @@
 		</div>
 
 
-		<!-- Account edit modal -->
-		<div class="modal fade" id="accountEditModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+		<!-- Payment modal -->
+		<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="accountEditModalTitle">Account</h5>
+						<h5 class="modal-title" id="accountEditModalTitle">Make a payment</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
@@ -237,38 +237,49 @@
 							<div class="main-body">
 								<div class="row gutters-sm">
 									<div class="col-md-8">
-										<form id="accountEditForm" name='accountEditForm' action="/user/account/edit" method='POST'>
+										<form id="paymentForm" name='paymentForm' action="/user/account/pay" method='POST'>
 											<div class="row">
-												<div class="row">
-													<h6 class="mb-0">Account number</h6>
-													<p id="accountEditNumber">0000 0000 0000 0000</p>
+												<h6 class="mb-0">Account to pay from</h6>
+												<div class="btn-group">
+													<button id="accountDropdownButton" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+														Select account
+													</button>
+													<div class="dropdown-menu">
+														<div th:each="account : ${user.getAccounts()}">
+															<div class="dropdown-item" th:attr="onclick=|selectPaymentAccount('${account.getId()}', '${account.getFormattedNumber()}', '${account.getName()}', '${account.getBalance()}','${account.getCurrency()}')|">
+																<span th:text="${account.getFormattedNumber ()} + ' ' + ${account.getName()}"></span>
+																<span class="text-success" th:text="' (' + ${account.getBalance()} + ' ' + ${account.getCurrency()} + ') '"></span>
+															</div>
+														</div>
+													</div>
 												</div>
+
+											</div>
+											<div class="row">
+												<h6 class="mb-0">Account to pay to</h6>
+												<input name="number" id="accountDestination" class="form-control"
+													   placeholder="Enter account number" />
+											</div>
+											<div class="row">
+												<h6 class="mb-0">Amount</h6>
+												<div class="input-group mb-3">
+													<div class="input-group-prepend">
+														<span id="currencySymbol" class="input-group-text">$</span>
+													</div>
+													<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+													<div class="input-group-append">
+														<span class="input-group-text">.00</span>
+													</div>
+												</div>
+
 											</div>
 											<hr>
-											<div class="row">
-												<h6 class="mb-0">Account name</h6>
-												<input name="name" id="accountEditName" class="form-control form-control-lg"
-													   placeholder="Enter name" />
-											</div>
-											<hr>
-											<div class="row">
-												<h6 class="mb-0">Currency</h6>
-												<input name="currency" id="accountEditCurrency" class="form-control form-control-lg"
-													   placeholder="Select currency" />
-												<!--
-												<div class="col-sm-9 text-secondary">
-													<span id="accountEditCurrency"></span>
-												</div>-->
-											</div>
 										</form>
 
 										<div class="row">
 											<div class="col-sm-12">
-												<a class="btn btn-info" onclick="saveAccountData()">Save</a>
+												<a class="btn btn-info" onclick="pay()">Pay</a>
 												<!--<input class="btn btn-lg btn-info" style="padding-left: 2.5rem; padding-right: 2.5rem;" onclick="saveAccountData()" name="submit" type="submit" value="Save">-->
-											</div>
-											<div class="col-sm-12">
-												<a class="btn btn-outline-danger" onclick="deleteAccount()">Delete</a>
 											</div>
 										</div>
 									</div>
@@ -281,17 +292,17 @@
 		</div>
 
 		<div class="mt-4 p-3 bg-white rounded">
-			<h2>Hello, <span th:text="${user.getFirstName()}"></span></h2>
-			<h4>Accounts</h4>
+			<h4>Payments</h4>
 
-			<!-- accounts card deck -->
+			<a class="btn btn-info" onclick="openPaymentModal()">Make a payment</a>
 
-			<div id="card-container" style="max-height: 250px">
+
+			<!--<div id="card-container" style="max-height: 250px">
 				<div class="container-fluid py-2">
 					<div class="d-flex flex-row flex-nowrap">
 						<div th:each="account : ${user.getAccounts()}" class="card account card-body border-2 shadow rounded">
-							<!-- fixme openAccountEditModal takes account as a parameter, but formats as a string? -->
-							<button type="button" class="btn" th:attr="onclick=|openAccountEditModal('${account}', '${account.getId()}', '${account.getNumber()}', '${account.getName()}', '${account.getCurrency()}')|">
+
+							<button type="button" class="btn" th:attr="onclick=|openAccountEditModal('${account.getId()}', '${account.getNumber()}', '${account.getName()}', '${account.getCurrency()}')|">
 								<p th:text="${account.getName()}"></p>
 								<p th:text="${account.getFormattedNumber()}"></p>
 								<span class="text-success" th:text="${account.getBalance()} + ' ' + ${account.getCurrency()}"></span>
@@ -308,14 +319,14 @@
 						</button>
 					</div>
 				</div>
-			</div>
+			</div>-->
 		</div>
 	</div>
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-<script type="text/javascript" th:src="@{/js/account.js}"></script>
+<script type="text/javascript" th:src="@{/js/payments.js}"></script>
 <script type="text/javascript" th:src="@{/js/user.js}"></script>
 <script type="text/javascript" th:src="@{/js/utils.js}"></script>
 </body>
