@@ -2,30 +2,23 @@ package com.nlogax.banking.controller;
 
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.service.AccountService;
-import com.nlogax.banking.service.UserService;
-import com.nlogax.banking.web.dto.AccountDto;
-import com.nlogax.banking.web.dto.UserRegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
 public class MainController extends WebMvcConfigurerAdapter {
-
-    @Autowired
-    UserService userService;
 
     @Autowired
     AccountService accountService;
@@ -63,21 +56,6 @@ public class MainController extends WebMvcConfigurerAdapter {
         return "payments";
     }
 
-    @RequestMapping("/")
-    public String makeTransaction (Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            User user = (User) auth.getPrincipal();
-            model.addAttribute("user", user);
-
-            if (user.getRoles().stream().anyMatch(a -> a.getName().equals("ROLE_ADMIN")))
-                model.addAttribute("isAdmin", "true");
-        }
-
-        return "index";
-    }
-
-
     // todo attribute vs parameter
     @RequestMapping("/login")
     public String showLoginPage (Model model, HttpServletRequest request,
@@ -108,20 +86,4 @@ public class MainController extends WebMvcConfigurerAdapter {
         model.addAttribute("error", error);
         return "registration";
     }
-
-    @PostMapping("/user/new")
-    public String register (RedirectAttributes ra,
-                            @ModelAttribute("userData") UserRegistrationDto data) {  // todo validation
-        ra.addFlashAttribute("registered", "true");
-        userService.save(data);
-        return "redirect:/login";
-    }
-
-
-    @PostMapping("/user/account/edit")
-    public String editAccount (@ModelAttribute("accountDto") AccountDto data) {  // todo validation
-        accountService.save(data);
-        return "redirect:/";
-    }
-
 }
