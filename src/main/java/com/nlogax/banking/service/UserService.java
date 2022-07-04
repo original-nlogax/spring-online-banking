@@ -1,6 +1,5 @@
 package com.nlogax.banking.service;
 
-import com.nlogax.banking.model.Account;
 import com.nlogax.banking.model.Role;
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.repository.UserRepository;
@@ -10,31 +9,54 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
-    private UserRepository repository;
+    private final UserRepository repository;
 
     public UserService(UserRepository repository) {
         this.repository = repository;
     }
 
     public User save(UserRegistrationDto registrationDto) {
-        boolean isAdmin = registrationDto.getEmail().equals("123");
-
         List<Role> roles = new ArrayList<>();
-        if (isAdmin) roles.add(new Role("ROLE_ADMIN"));
-        roles.add(new Role("ROLE_USER"));
 
-        List<Account> accounts = new ArrayList<>();
+        if (registrationDto.getEmail().equals("123")) roles.add(new Role("ROLE_ADMIN"));
+        roles.add(new Role("ROLE_USER"));
 
         User user = new User(
                 Utils.capitalizeFirstLetter(registrationDto.getFirstName()),
                 Utils.capitalizeFirstLetter(registrationDto.getLastName()), registrationDto.getEmail(), registrationDto.getPhoneNumber(),
-                registrationDto.getPassword(), roles, accounts);
+                registrationDto.getPassword(), roles, new ArrayList<>());
 
-        System.out.println("Saving new user [" + registrationDto.getEmail() + "] (admin = " + isAdmin + ")");
+        System.out.println("Saving new user [" + registrationDto.getEmail() + "] (admin = " + roles.contains("ROLE_ADMIN") + ")");
         return repository.save(user);
     }
 
+    public List<User> getAll () {
+        return repository.findAll();
+    }
+
+    // todo should be acessible only for admins
+    public User get (Long id) {
+        Optional<User> user = repository.findById(id);
+        return user.orElse(null);
+    }
+
+    // fixme make better
+    public User getByEmail (String email) {
+        User user = repository.findByEmail(email).get(0);
+        return user;
+    }
+
+    public boolean delete (Long id) {
+        Optional<User> user = repository.findById(id);
+        if (user.isPresent()) {
+            user.get().getAccounts().forEach(account -> account.setUser(null));
+            repository.delete(user.get());
+        }
+
+        return user.isPresent();
+    }
 }

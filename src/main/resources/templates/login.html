@@ -13,15 +13,16 @@
             </div>
             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
 
+                <!--
                 <div class="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
                 <div th:if="${registered == 'true'}">
                     <h2>You registered successfully. You can enter your credentials now:</h2>
                 </div>
                 <div th:if="${logout == 'true'}">
                     <h2>Logged out successfully</h2>
-                </div>
+                </div>-->
 
-                <form id="loginForm" name="f" action="login" method='POST'>
+                <form th:action="@{/login}" method='POST'>
                     <div class="form-outline mb-4">
                         <input name="username" id="username" class="form-control form-control-lg"
                                placeholder="Enter email" />     <!--fixme add type="email" -->
@@ -46,7 +47,7 @@
 
                     <div class="text-center text-lg-start mt-4 pt-2">
 
-                        <input onclick="login()" class="btn btn-lg btn-primary" style="padding-left: 2.5rem; padding-right: 2.5rem;" name="submit" type="submit" value="Login">
+                        <input class="btn btn-lg btn-primary" style="padding-left: 2.5rem; padding-right: 2.5rem;" type="submit" value="Login">
                         <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="/registration"
                                                                                           class="link-danger">Register</a></p>
                     </div>
@@ -57,6 +58,5 @@
     </div>
 </section>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
 </body>
 </html>

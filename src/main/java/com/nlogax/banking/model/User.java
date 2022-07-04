@@ -1,12 +1,11 @@
 package com.nlogax.banking.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -40,6 +39,7 @@ public class User {
     // of using the @OneToMany annotation with the 'mappedBy' property, it also means that the other
     // side holding the @ManyToOne annotation with the @JoinColumn is the 'owner'
     // of this bi-directional relationship.
+    @JsonManagedReference
     @Fetch(value = FetchMode.SUBSELECT) // bug: https://stackoverflow.com/a/8309458
     @OneToMany(targetEntity=com.nlogax.banking.model.Account.class, mappedBy = "user", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)  // todo why does EAGER crashes?
     private Collection<Account> accounts;

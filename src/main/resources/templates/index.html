@@ -108,9 +108,9 @@
 	<div class="p-3 m-3 shadow bg-white rounded">
 		<div>
 			<div class="input-group rounded">
-				<!-- clickable profile thumbnail -->
 
-				<button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#profileModal">
+				<!-- clickable profile thumbnail -->
+				<button type="button" class="btn btn-light" onclick="fillProfileModal()" data-bs-toggle="modal" data-bs-target="#profileModal">
 					<img class="rounded-circle z-depth-2" alt="100x100"
 						 src="https://thumbs.dreamstime.com/b/cute-cat-portrait-square-photo-beautiful-white-closeup-105311158.jpg"
 						 data-holder-rendered="true" style="max-height: 48px; max-width: 48px">
@@ -156,11 +156,11 @@
 												<div class="d-flex flex-column align-items-center text-center">
 													<img src="https://thumbs.dreamstime.com/b/cute-cat-portrait-square-photo-beautiful-white-closeup-105311158.jpg" alt="Admin" class="rounded-circle" width="150">
 													<div class="mt-3">
-														<h4><span th:text="${user.getFirstName()} + ' ' + ${user.getLastName()}"/></h4>
-														<p class="text-secondary mb-1">Customer</p>
-														<p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
+														<h4 id="profileFirstLastName"><!--<span th:text="${user.getFirstName()} + ' ' + ${user.getLastName()}"/>--></h4>
+														<p class="text-secondary mb-1"></p>
+														<p class="text-muted font-size-sm"></p>
 
-														<a href="/adm" class="btn btn-info" th:if="${isAdmin=='true'}">Admin panel</a>
+														<a id="profileAdminPanelButton" href="/adm" class="btn btn-info">Admin panel</a>
 														<a href="/logout" class="btn btn-outline-primary">Logout</a>
 
 													</div>
@@ -174,19 +174,11 @@
 											<div class="card-body">
 												<div class="row">
 													<div class="col-sm-3">
-														<h6 class="mb-0">Full Name</h6>
-													</div>
-													<div class="col-sm-9 text-secondary">
-														<span th:text="${user.getFirstName()} + ' ' + ${user.getLastName()}"/>
-													</div>
-												</div>
-												<hr>
-												<div class="row">
-													<div class="col-sm-3">
 														<h6 class="mb-0">Email</h6>
 													</div>
 													<div class="col-sm-9 text-secondary">
-														<span th:text="${user.getEmail()}"/>
+														<p id="profileEmail"></p>
+														<!--<span th:text="${user.getEmail()}"/>-->
 													</div>
 												</div>
 												<hr>
@@ -195,13 +187,14 @@
 														<h6 class="mb-0">Phone number</h6>
 													</div>
 													<div class="col-sm-9 text-secondary">
-														<span th:text="${user.getPhoneNumber()}"/>
+														<p id="profilePhoneNumber"></p>
+														<!--<span th:text="${user.getPhoneNumber()}"/>-->
 													</div>
 												</div>
 												<hr>
 												<div class="row">
 													<div class="col-sm-12">
-														<a class="btn btn-info" onclick="editUserData()">Edit</a>
+														<a class="btn btn-info" onclick="editProfileData()">Edit</a>
 													</div>
 												</div>
 											</div>
@@ -237,7 +230,7 @@
 							<div class="main-body">
 								<div class="row gutters-sm">
 									<div class="col-md-8">
-										<form id="accountEditForm" name='accountEditForm' action="/user/account/edit" method='POST'>
+										<form id="accountEditForm" name='accountEditForm' method='POST'> <!--action="/accounts/edit"-->
 											<div class="row">
 												<div class="row">
 													<h6 class="mb-0">Account number</h6>
@@ -260,17 +253,17 @@
 													<span id="accountEditCurrency"></span>
 												</div>-->
 											</div>
-										</form>
 
-										<div class="row">
-											<div class="col-sm-12">
-												<a class="btn btn-info" onclick="saveAccountData()">Save</a>
-												<!--<input class="btn btn-lg btn-info" style="padding-left: 2.5rem; padding-right: 2.5rem;" onclick="saveAccountData()" name="submit" type="submit" value="Save">-->
+											<div class="row">
+												<div class="col-sm-12">
+													<a class="btn btn-info" onclick="saveAccount()">Save</a>
+													<!--<input class="btn btn-lg btn-info" style="padding-left: 2.5rem; padding-right: 2.5rem;" onclick="saveAccountData()" name="submit" type="submit" value="Save">-->
+												</div>
+												<div class="col-sm-12">
+													<a class="btn btn-outline-danger" onclick="deleteAccount()">Delete</a>
+												</div>
 											</div>
-											<div class="col-sm-12">
-												<a class="btn btn-outline-danger" onclick="deleteAccount()">Delete</a>
-											</div>
-										</div>
+										</form>
 									</div>
 								</div>
 							</div>
@@ -281,22 +274,20 @@
 		</div>
 
 		<div class="mt-4 p-3 bg-white rounded">
-			<h2>Hello, <span th:text="${user.getFirstName()}"></span></h2>
+			<!--<h2>Hello, <span th:text="${user.getFirstName()}"></span></h2>-->
 			<h4>Accounts</h4>
 
 			<!-- accounts card deck -->
-
 			<div id="card-container" style="max-height: 250px">
 				<div class="container-fluid py-2">
 					<div class="d-flex flex-row flex-nowrap">
-						<div th:each="account : ${user.getAccounts()}" class="card account card-body border-2 shadow rounded">
-							<!-- fixme openAccountEditModal takes account as a parameter, but formats as a string? -->
-							<button type="button" class="btn" th:attr="onclick=|openAccountEditModal('${account}', '${account.getId()}', '${account.getNumber()}', '${account.getName()}', '${account.getCurrency()}')|">
-								<p th:text="${account.getName()}"></p>
-								<p th:text="${account.getFormattedNumber()}"></p>
-								<span class="text-success" th:text="${account.getBalance()} + ' ' + ${account.getCurrency()}"></span>
-							</button>
+
+
+
+						<div id="accountsCardDeck">
+							<!--<div class="card account card-body border-2 shadow rounded"></div>-->
 						</div>
+
 						<button type="button" class="btn" onclick="openAccountEditModal()">
 							<div class="card account card-body border-2 shadow rounded">
 								<div class="d-flex justify-content-center">
@@ -315,8 +306,8 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-<script type="text/javascript" th:src="@{/js/account.js}"></script>
 <script type="text/javascript" th:src="@{/js/user.js}"></script>
+<script type="text/javascript" th:src="@{/js/account.js}"></script>
 <script type="text/javascript" th:src="@{/js/utils.js}"></script>
 </body>
 </html>

@@ -1,28 +1,27 @@
-package com.nlogax.banking.controller;
+package com.nlogax.banking.controller.app;
 
-import com.nlogax.banking.model.User;
-import com.nlogax.banking.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Controller
-public class MainController extends WebMvcConfigurerAdapter {
+public class MainController {
 
-    @Autowired
-    AccountService accountService;
+    @RequestMapping
+    public String index() {
+        return "index";
+    }
 
+    @RequestMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @RequestMapping("/registration")
+    public String registration() {
+        return "registration";
+    }
+
+    /*
     @RequestMapping("/adm")
     public String showAdminPanel () {
         return "adm";
@@ -85,5 +84,5 @@ public class MainController extends WebMvcConfigurerAdapter {
                                         @RequestParam(value = "error", required = false) String error) {
         model.addAttribute("error", error);
         return "registration";
-    }
+    }*/
 }

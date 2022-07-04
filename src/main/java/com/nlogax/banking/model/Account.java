@@ -1,12 +1,10 @@
 package com.nlogax.banking.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.nlogax.banking.utils.CreditCardNumberGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import com.nlogax.banking.model.User;
-import org.hibernate.type.CurrencyType;
 
 import javax.persistence.*;
 
@@ -16,6 +14,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Account {
+
+    public static String BIN_NUMBER = "423";    // todo use variable from bank.properties
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,16 +26,15 @@ public class Account {
     private String number;
 
     //@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // todo why does EAGER crashes?
+    @JsonBackReference
     @ManyToOne
     private User user;
 
     public Account(User user, String name, String currency) {
-        super();   //fixme
         this.user = user;
         this.name = name;
         this.currency = currency;
-        number = new CreditCardNumberGenerator().generate("423", 16);
-        System.out.println("number = " + number);
+        number = new CreditCardNumberGenerator().generate(BIN_NUMBER, 16);
     }
 
     public Account(String name, String currency) {
@@ -47,14 +47,5 @@ public class Account {
 
     public void withdraw (float amount) {
 
-    }
-
-    public String getFormattedNumber () {
-        return "**** " + number.substring(number.length()-4);
-    }
-
-    // todo use?
-    public String getHTML () {
-        return getFormattedNumber() + ' ' + name + " <span class='test-success'>(" + balance + " " + currency + " </span>";
     }
 }
