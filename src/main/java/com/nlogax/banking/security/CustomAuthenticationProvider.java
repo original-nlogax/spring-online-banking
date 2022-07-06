@@ -19,7 +19,7 @@ import java.util.List;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
-    UserRepository repo;
+    UserRepository userRepository;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -33,7 +33,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         // if we didn't write custom auth provider then we'd write complex
         // sql queries which isn't probably good by hibernate standard
 
-        List<User> users = repo.findByEmail(name);
+        List<User> users = userRepository.findByEmail(name);
         if (users.size() > 0) {
             User user = users.get(0);
 

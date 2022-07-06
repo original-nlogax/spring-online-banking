@@ -23,31 +23,21 @@ public class UsersController {
         return service.getAll();
     }*/
 
+    //todo @SecurityRequirement(name = "role?")
     @GetMapping(value = "/{id}")
     public ResponseEntity<User> get (@PathVariable Long id) {
         User user = service.get(id);
-        if (user == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND); // or notFound().build() ?
-        else return ok(user);
+        return ok(user);
     }
 
     @DeleteMapping(value = "/{id}")
-    //    on every:
-    //@ResponseStatus(NO_CONTENT)
-    //@SecurityRequirement(name = "token")
-    //@Operation(summary = "Delete user")
     public ResponseEntity<Void> delete (@PathVariable Long id) {
-        boolean valid = true;   //todo
-        if (!valid) return badRequest().build();
-
-        boolean success = service.delete(id);
-
-        if (success) return ok().build();
-        else return notFound().build();
+        service.delete(id);
+        return ok().build();
     }
 
     @PostMapping
     public ResponseEntity<Void> register (@ModelAttribute("userRegistrationDto") UserRegistrationDto data) {  // todo validation
-        System.out.println(data);
         service.save(data);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

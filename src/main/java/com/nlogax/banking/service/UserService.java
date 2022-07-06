@@ -1,5 +1,6 @@
 package com.nlogax.banking.service;
 
+import com.nlogax.banking.exception.UserDoesntExistException;
 import com.nlogax.banking.model.Role;
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.repository.UserRepository;
@@ -37,25 +38,33 @@ public class UserService {
         return repository.findAll();
     }
 
-    // todo should be acessible only for admins
     public User get (Long id) {
         Optional<User> user = repository.findById(id);
-        return user.orElse(null);
+        if (user.isEmpty())
+            throw new UserDoesntExistException();
+
+        return user.get();
     }
 
-    // fixme make better
     public User getByEmail (String email) {
         User user = repository.findByEmail(email).get(0);
         return user;
     }
 
-    public boolean delete (Long id) {
+    public void delete (Long id) {
+        Optional<User> user = repository.findById(id);
+        if (user.isEmpty())
+            throw new UserDoesntExistException();
+
+        user.get().getAccounts().forEach(account -> account.setUser(null));
+        repository.delete(user.get());
+        /*
         Optional<User> user = repository.findById(id);
         if (user.isPresent()) {
             user.get().getAccounts().forEach(account -> account.setUser(null));
             repository.delete(user.get());
         }
 
-        return user.isPresent();
+        return user.isPresent();*/
     }
 }

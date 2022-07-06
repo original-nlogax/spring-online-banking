@@ -1,5 +1,7 @@
 package com.nlogax.banking.service;
 
+import com.nlogax.banking.exception.AccountDoesntExistException;
+import com.nlogax.banking.exception.AlreadyExistsException;
 import com.nlogax.banking.model.Account;
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.repository.AccountRepository;
@@ -29,17 +31,18 @@ public class AccountService  {
         return repository.getByNumber(number);
     }
 
-    // todo should be accessible only for admins
-    // maybe attribute based authority check?
     public Account get (Long id) {
         Optional<Account> account = repository.findById(id);
-        return account.orElse(null);
+        if (account.isEmpty())
+            throw new AccountDoesntExistException();
+
+        return account.get();
     }
 
     public Account save (AccountDto accountDto) {
         if (accountDto.getId() != null) {
             // if accountDto has id, then it means that it is already saved in db
-            return null;
+            throw new AlreadyExistsException();
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -54,25 +57,24 @@ public class AccountService  {
         return account;
     }
 
-    public boolean update (AccountDto accountDto) {
+    public void update (AccountDto accountDto) {
         if (accountDto.getId() == null) {
             // if accountDto has no id, then it means that it is absent from db
-            return false;
+            throw new AccountDoesntExistException();
         }
 
         Long id = Long.parseLong(accountDto.getId());
         Optional<Account> account = repository.findById(id);
-        if (account.isPresent()) {
-            account.get().setName(accountDto.getName());
-            account.get().setCurrency(accountDto.getCurrency());
+        if (account.isEmpty())
+            throw new AccountDoesntExistException();
 
-            repository.save(account.get());
-        }
-
-        return account.isPresent();
+        account.get().setName(accountDto.getName());
+        account.get().setCurrency(accountDto.getCurrency());
+        repository.save(account.get());
     }
 
-    public boolean delete (Long id) {
+    public void delete (Long id) {
+        /*
         Optional<Account> account = repository.findById(id);
         if (account.isPresent()) {
             User accountHolder = account.get().getUser();
@@ -80,6 +82,14 @@ public class AccountService  {
             repository.delete(account.get());
         }
 
-        return account.isPresent();
+        return account.isPresent();*/
+
+        Optional<Account> account = repository.findById(id);
+        if (account.isEmpty())
+            throw new AccountDoesntExistException();
+
+        User accountHolder = account.get().getUser();
+        accountHolder.getAccounts().remove(account.get());
+        repository.delete(account.get());
     }
 }

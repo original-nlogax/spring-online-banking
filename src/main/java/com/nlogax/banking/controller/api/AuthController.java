@@ -24,6 +24,7 @@ public class AuthController {
     public ResponseEntity<User> getAuthUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null)
+            // throw?
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         Object principal = auth.getPrincipal();

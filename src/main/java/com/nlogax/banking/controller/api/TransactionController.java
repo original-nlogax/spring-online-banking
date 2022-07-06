@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -27,17 +26,8 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<Void> add (@ModelAttribute("transactionDto") TransactionDto data) {
-        boolean valid = true;   //todo
-        if (!valid) return badRequest().build();
-
-        //try {
-            service.save(data);
+        // exceptions are thrown in service layer
+        service.save(data);
         return new ResponseEntity<>(HttpStatus.CREATED);
-        //} catch (AlreadyExistsException alreadyExists) {
-       //     return new ResponseEntity<>(HttpStatus);
-        //}
-
-        //if (success) return new ResponseEntity<>(HttpStatus.CREATED);
-        //else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

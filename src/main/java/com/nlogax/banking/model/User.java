@@ -57,6 +57,13 @@ public class User {
         enabled = true;
     }
 
+    public boolean isAdmin() {
+        return getRoles()
+                .stream()
+                .anyMatch((role) -> role.getName().equals("ROLE_ADMIN"));
+    }
+
+
     // from UsernamePasswordAuthenticationToken doc:
     // The principal and credentials should be set with an Object that provides the respective property via
     // its Object.toString() method. The simplest such Object to use is String.

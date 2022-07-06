@@ -23,33 +23,23 @@ public class AccountController {
         return service.exists(id) ? ok().build() : notFound().build();
     }*/
 
+    //todo @SecurityRequirement(name = "role?")
     @GetMapping(value = "/{id}")
     public ResponseEntity<Account> get (@PathVariable Long id) {
         Account account = service.get(id);
-        if (account == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND); // or notFound().build() ?
-        else return ok(account);
+        return ok(account);
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Void> update (@PathVariable Long id, @ModelAttribute("accountDto") AccountDto data) {
-        boolean valid = true;   //todo
-        if (!valid) return badRequest().build();
-
-        boolean success = service.update(data);
-
-        if (success) return ok().build();
-        else return notFound().build();
+        service.update(data);
+        return ok().build();
     }
 
     @PostMapping
     public ResponseEntity<Void> add (@ModelAttribute("accountDto") AccountDto data) {
-        boolean valid = true;   //todo
-        if (!valid) return badRequest().build();
-
-        boolean success = service.save(data) != null;
-
-        if (success) return new ResponseEntity<>(HttpStatus.CREATED);
-        else return new ResponseEntity<>(HttpStatus.CONFLICT);  // already exists
+        service.save(data);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -58,13 +48,8 @@ public class AccountController {
     //@SecurityRequirement(name = "token")
     //@Operation(summary = "Delete user")
     public ResponseEntity<Void> delete (@PathVariable Long id) {
-        boolean valid = true;   //todo
-        if (!valid) return badRequest().build();
-
-        boolean success = service.delete(id);
-
-        if (success) return ok().build();
-        else return notFound().build();
+        service.delete(id);
+        return ok().build();
     }
 
 }

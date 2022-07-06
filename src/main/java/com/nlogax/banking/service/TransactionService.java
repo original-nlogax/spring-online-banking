@@ -45,7 +45,6 @@ public class TransactionService {
         if (!accountService.existsByNumber(transactionDto.getNumberTo()))
             throw new AccountDoesntExistException("Destination account with number " + transactionDto.getNumberTo() + " doesn't exist");
 
-
         Transaction transaction = new Transaction(
                 transactionDto.getNumberFrom(), transactionDto.getNumberTo(), transactionDto.getAmount()
         );
