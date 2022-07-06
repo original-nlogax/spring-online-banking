@@ -4,8 +4,8 @@ let accountModal;
 fillAccountsCardDeck();
 
 async function fillAccountsCardDeck () {
+
     let user = await getAuthorizedUser();
-    console.log(user.accounts)
     const deck = document.getElementById("accountsCardDeck");
 
     let addAccountButton;
@@ -65,7 +65,7 @@ function openAccountEditModal (account) {
         number.hidden = false;
         number.innerHTML = account.number;
         name.value = account.name;
-        currency.value = account.currency;
+        currency.innerText = account.currency;
     } else {
         number.hidden = true;
         name.value = "";
@@ -78,7 +78,6 @@ function openAccountEditModal (account) {
 
 async function saveAccount () {
     let form = document.getElementById("accountEditForm");
-
     let response;
 
     if (currentEditedAccount === undefined) { // creating new account

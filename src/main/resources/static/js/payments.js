@@ -1,6 +1,6 @@
-var currentPayFromAccountId;
+let currentPayFromAccountId;
 
-function selectPaymentAccount (accountId, formattedNumber, name, balance, currency) {
+function setPaymentAccount (accountId, formattedNumber, name, balance, currency) {
     document.getElementById("currencySymbol").innerHTML = currency;
     document.getElementById("accountDropdownButton").innerHTML =
         formattedNumber + ' ' + name + " <span class='test-success'>(" + balance + " " + currency + ")</span>";
