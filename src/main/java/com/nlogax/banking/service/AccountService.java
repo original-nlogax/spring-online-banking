@@ -17,8 +17,16 @@ public class AccountService  {
     @Autowired
     private AccountRepository repository;
 
-    public boolean exists (Long id) {
+    public boolean existsById (Long id) {
         return repository.existsById(id);
+    }
+
+    public boolean existsByNumber (String number) {
+        return getByNumber(number) != null;
+    }
+
+    public Account getByNumber (String number) {
+        return repository.getByNumber(number);
     }
 
     // todo should be accessible only for admins
