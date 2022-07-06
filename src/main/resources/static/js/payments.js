@@ -11,8 +11,7 @@ async function transfer (from, to, amount) {
 
     if (response !== undefined) {
         if (response.ok) {
-            console.log(response)
-            //return response.json();
+            return response;
         }
     }
 }

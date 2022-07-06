@@ -46,9 +46,9 @@ public class TransactionService {
             throw new AccountDoesntExistException("Destination account with number " + transactionDto.getNumberTo() + " doesn't exist");
 
         // money printer for admins
-        if (sessionService.getAuthUser().isAdmin()) {
+        if (sessionService.getAuthUser().isAdmin() && transactionDto.getNumberFrom().equals("MONEY PRINTER")) {
             Transaction transaction = new Transaction(
-                    "MONEY PRINTER", transactionDto.getNumberTo(), transactionDto.getAmount()
+                    transactionDto.getNumberFrom(), transactionDto.getNumberTo(), transactionDto.getAmount()
             );
             accountService.getByNumber(transactionDto.getNumberTo()).deposit(transactionDto.getAmount());
             repository.save(transaction);
