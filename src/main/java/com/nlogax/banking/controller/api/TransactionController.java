@@ -26,7 +26,6 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<Void> add (@ModelAttribute("transactionDto") TransactionDto data) {
-        // exceptions are thrown in service layer
         service.save(data);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

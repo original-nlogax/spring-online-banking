@@ -21,6 +21,9 @@ public class TransactionService {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private SessionService sessionService;
+
     public boolean exists (Long id) {
         return repository.existsById(id);
     }
@@ -39,11 +42,21 @@ public class TransactionService {
         }
 
         // suppose we can transfer money only between our bank accounts
-        if (!accountService.existsByNumber(transactionDto.getNumberFrom()))
-            throw new AccountDoesntExistException("Source account with number " + transactionDto.getNumberFrom() + " doesn't exist");
-
         if (!accountService.existsByNumber(transactionDto.getNumberTo()))
             throw new AccountDoesntExistException("Destination account with number " + transactionDto.getNumberTo() + " doesn't exist");
+
+        // money printer for admins
+        if (sessionService.getAuthUser().isAdmin()) {
+            Transaction transaction = new Transaction(
+                    "MONEY PRINTER", transactionDto.getNumberTo(), transactionDto.getAmount()
+            );
+            accountService.getByNumber(transactionDto.getNumberTo()).deposit(transactionDto.getAmount());
+            repository.save(transaction);
+            return transaction;
+        }
+
+        if (!accountService.existsByNumber(transactionDto.getNumberFrom()))
+            throw new AccountDoesntExistException("Source account with number " + transactionDto.getNumberFrom() + " doesn't exist");
 
         Transaction transaction = new Transaction(
                 transactionDto.getNumberFrom(), transactionDto.getNumberTo(), transactionDto.getAmount()
