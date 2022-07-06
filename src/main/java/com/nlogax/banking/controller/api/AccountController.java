@@ -31,7 +31,7 @@ public class AccountController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Void> update (@ModelAttribute("accountDto") AccountDto data) {
+    public ResponseEntity<Void> update (@PathVariable Long id, @ModelAttribute("accountDto") AccountDto data) {
         boolean valid = true;   //todo
         if (!valid) return badRequest().build();
 
@@ -46,10 +46,24 @@ public class AccountController {
         boolean valid = true;   //todo
         if (!valid) return badRequest().build();
 
-        System.out.println(data);
         boolean success = service.save(data) != null;
 
         if (success) return new ResponseEntity<>(HttpStatus.CREATED);
         else return new ResponseEntity<>(HttpStatus.CONFLICT);  // already exists
+    }
+
+    @DeleteMapping(value = "/{id}")
+    //    on every:
+    //@ResponseStatus(NO_CONTENT)
+    //@SecurityRequirement(name = "token")
+    //@Operation(summary = "Delete user")
+    public ResponseEntity<Void> delete (@PathVariable Long id) {
+        boolean valid = true;   //todo
+        if (!valid) return badRequest().build();
+
+        boolean success = service.delete(id);
+
+        if (success) return ok().build();
+        else return notFound().build();
     }
 }

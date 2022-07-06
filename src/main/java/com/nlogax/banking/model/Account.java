@@ -25,9 +25,9 @@ public class Account {
     private String currency;
     private String number;
 
-    //@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)  // todo why does EAGER crashes?
+    //@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  // todo why does EAGER crashes?
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     public Account(User user, String name, String currency) {

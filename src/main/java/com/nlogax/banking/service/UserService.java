@@ -5,6 +5,7 @@ import com.nlogax.banking.model.User;
 import com.nlogax.banking.repository.UserRepository;
 import com.nlogax.banking.utils.Utils;
 import com.nlogax.banking.web.dto.UserRegistrationDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,11 +14,9 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private final UserRepository repository;
 
-    public UserService(UserRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private UserRepository repository;
 
     public User save(UserRegistrationDto registrationDto) {
         List<Role> roles = new ArrayList<>();
@@ -30,7 +29,7 @@ public class UserService {
                 Utils.capitalizeFirstLetter(registrationDto.getLastName()), registrationDto.getEmail(), registrationDto.getPhoneNumber(),
                 registrationDto.getPassword(), roles, new ArrayList<>());
 
-        System.out.println("Saving new user [" + registrationDto.getEmail() + "] (admin = " + roles.contains("ROLE_ADMIN") + ")");
+        System.out.println("Saving new user [" + registrationDto.getEmail() + "]");
         return repository.save(user);
     }
 

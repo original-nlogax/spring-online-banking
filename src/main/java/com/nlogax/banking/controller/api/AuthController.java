@@ -27,6 +27,7 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         Object principal = auth.getPrincipal();
+
         if (principal instanceof User)
             return ok((User) principal);
         else

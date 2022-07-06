@@ -55,7 +55,6 @@ public class MainController {
         return "payments";
     }
 
-    // todo attribute vs parameter
     @RequestMapping("/login")
     public String showLoginPage (Model model, HttpServletRequest request,
                                  @RequestParam(value = "error", required = false) String error,

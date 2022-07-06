@@ -1,6 +1,5 @@
 var currentPayFromAccountId;
 
-// fixme parameters: needs to be either only account, or all it's properties
 function selectPaymentAccount (accountId, formattedNumber, name, balance, currency) {
     document.getElementById("currencySymbol").innerHTML = currency;
     document.getElementById("accountDropdownButton").innerHTML =

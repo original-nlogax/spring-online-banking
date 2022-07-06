@@ -1,15 +1,20 @@
 let currentEditedAccount;
+let accountModal;
 
-document.onload = fillAccountsCardDeck();
+fillAccountsCardDeck();
 
 async function fillAccountsCardDeck () {
     let user = await getAuthorizedUser();
+    console.log(user.accounts)
     const deck = document.getElementById("accountsCardDeck");
 
-    console.log(user)
-    console.log(user.accounts)
+    let addAccountButton;
+    deck.childNodes.forEach(function(card) {
+        if (card.id === "newAccountButton") addAccountButton = card;
+    });
+    deck.textContent = '';
+
     user.accounts.forEach(account => {
-        console.log(account);
         /*<button type="button" className="btn"
                 th:attr="onclick=|openAccountEditModal('${account}', '${account.getId()}', '${account.getNumber()}', '${account.getName()}', '${account.getCurrency()}')|">
             <p th:text="${account.getName()}"></p>
@@ -41,6 +46,8 @@ async function fillAccountsCardDeck () {
         card.appendChild(button);
         deck.appendChild(card);
     });
+
+    deck.appendChild(addAccountButton);
 }
 
 function getFormattedAccountNumber (number) {
@@ -50,35 +57,56 @@ function getFormattedAccountNumber (number) {
 function openAccountEditModal (account) {
     currentEditedAccount = account;
 
+    let number = document.getElementById("accountEditNumber");
+    let name = document.getElementById("accountEditName");
+    let currency = document.getElementById("accountEditCurrency");
+
     if (currentEditedAccount !== undefined) {
-        document.getElementById("accountEditNumber").innerHTML = account.number;
-        document.getElementById("accountEditName").value = account.name;
-        document.getElementById("accountEditCurrency").value = account.currency;
+        number.hidden = false;
+        number.innerHTML = account.number;
+        name.value = account.name;
+        currency.value = account.currency;
+    } else {
+        number.hidden = true;
+        name.value = "";
+        currency.value = "";
     }
 
-    const accountModal = new bootstrap.Modal(document.getElementById('accountEditModal'), {});
+    accountModal = new bootstrap.Modal(document.getElementById('accountEditModal'), {});
     accountModal.show();
 }
 
 async function saveAccount () {
     let form = document.getElementById("accountEditForm");
 
-    let account;
+    let response;
 
     if (currentEditedAccount === undefined) { // creating new account
-        account = await fetch('/accounts', {method:'post', body: new FormData(form)});
+        response = await fetch('/accounts', {method:'post', body: new FormData(form)});
     } else {   // editing existing account
-        account = await fetch('/accounts/' + currentEditedAccount.id, {method:'put', body: new FormData(form)});
+        response = await fetch('/accounts/' + currentEditedAccount.id, {method:'put', body: new FormData(form)});
     }
 
-    console.log(account);
-    const accountModal = new bootstrap.Modal(document.getElementById('accountEditModal'), {});
-    accountModal.hide();
     currentEditedAccount = undefined;
+    accountModal.hide();
+
+    if (response !== undefined) {
+        if (response.ok) {
+            await fillAccountsCardDeck();
+            //return response.json();
+        }
+    }
 }
 
-function deleteAccount () {
-    const accountModal = new bootstrap.Modal(document.getElementById('accountEditModal'), {});
+async function deleteAccount () {
+   let response = await fetch('/accounts/' + currentEditedAccount.id, {method:'delete'});
+
+    if (response !== undefined) {
+        if (response.ok) {
+            await fillAccountsCardDeck();
+        }
+    }
+
     accountModal.hide();
     currentEditedAccount = undefined;
 }

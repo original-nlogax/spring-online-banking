@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 import static org.springframework.http.ResponseEntity.*;
 
 @RestController
@@ -19,10 +17,11 @@ public class UsersController {
     @Autowired
     UserService service;
 
+    /*
     @GetMapping
     public List<User> getAll () {
         return service.getAll();
-    }
+    }*/
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<User> get (@PathVariable Long id) {
@@ -46,9 +45,8 @@ public class UsersController {
         else return notFound().build();
     }
 
-    @PostMapping(value = "/")
-    public ResponseEntity<Void> register (/*@RequestBody (error)*/ /*@ModelAttribute("userData")*/ UserRegistrationDto data) {  // todo validation
-        System.out.println("saving:");
+    @PostMapping
+    public ResponseEntity<Void> register (@ModelAttribute("userRegistrationDto") UserRegistrationDto data) {  // todo validation
         System.out.println(data);
         service.save(data);
         return new ResponseEntity<>(HttpStatus.CREATED);

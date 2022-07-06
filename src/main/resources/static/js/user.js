@@ -20,7 +20,6 @@ async function getAuthorizedUser () {
 
     if (response !== undefined) {
         if (response.ok) {
-            console.log(response)
             return response.json();
         }
     }
@@ -45,8 +44,9 @@ async function registerUser () {
     let form = document.getElementById("registerForm");
 
     const response = await fetch('/users', {
-        method: 'POST',
-        body: new FormData(form)
+        method:'post',
+        body: new FormData(form),
+
     }).catch(err => {
         console.log(err);
     })
