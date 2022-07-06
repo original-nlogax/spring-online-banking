@@ -39,8 +39,8 @@ async function fillAccountsCardDeck () {
         button.appendChild(number);
 
         let balance = document.createElement("p");
-        balance.setAttribute("className", "text-success");
         balance.innerText = account.balance + " " + account.currency;
+        balance.className = "text-success";
         button.appendChild(balance);
 
         card.appendChild(button);
@@ -57,17 +57,19 @@ function getFormattedAccountNumber (number) {
 function openAccountEditModal (account) {
     currentEditedAccount = account;
 
-    let number = document.getElementById("accountEditNumber");
+    let number = document.getElementById("accountNumber");
+    let balance = document.getElementById("accountBalance");
     let name = document.getElementById("accountEditName");
     let currency = document.getElementById("accountEditCurrency");
 
     if (currentEditedAccount !== undefined) {
-        number.hidden = false;
-        number.innerHTML = account.number;
+        number.hidden = balance.hidden = false;
+        number.innerText = account.number;
+        balance.innerText = account.balance + ' ' + account.currency;
         name.value = account.name;
         currency.innerText = account.currency;
     } else {
-        number.hidden = true;
+        number.hidden = balance.hidden = true;
         name.value = "";
         currency.value = "";
     }

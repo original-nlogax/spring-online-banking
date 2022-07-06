@@ -190,7 +190,6 @@
 			</div>
 		</div>
 
-
 		<!-- account edit modal -->
 		<div class="modal fade" id="accountEditModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-lg">
@@ -206,16 +205,23 @@
 									<div class="col-md-8">
 										<form id="accountEditForm" name='accountEditForm' method='POST'> <!--action="/accounts/edit"-->
 											<div class="row">
-												<h6 class="mb-0">Account number</h6>
-												<p id="accountEditNumber">0000 0000 0000 0000</p>
+												<div class="col-sm">
+													<h6 class="mb-0">Account number</h6>
+													<p id="accountNumber"></p>
+												</div>
+												<div class="col-sm">
+													<h6 class="mb-0">Balance</h6>
+													<p class="text-success" id="accountBalance"></p>
+												</div>
 											</div>
-											<div class="row mt-3">
-												<label for="accountEditName">Name</label>
+
+											<div class="row mt-2">
+												<label class="mb-1" for="accountEditName">Name</label>
 												<input name="name" id="accountEditName" class="form-control form-control-lg"
 													   placeholder="Enter name" />
 											</div>
 											<div class="row mt-3">
-												<label for="accountEditCurrency">Currency</label>
+												<label class="mb-1" for="accountEditCurrency">Currency</label>
 												<div class="btn-group">
 													<input id="accountEditCurrencyInput" type="hidden" name="currency" value="value" />
 													<button id="accountEditCurrency" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
