@@ -1,6 +1,7 @@
 package com.nlogax.banking.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.nlogax.banking.enums.Currency;
 import com.nlogax.banking.utils.CreditCardNumberGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class Account {
     private Long id;
     private String name;
     private float balance;
-    private String currency;
+    private Currency currency;
     private String number;
 
     //@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  // todo why does EAGER crashes?
@@ -30,14 +31,14 @@ public class Account {
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
-    public Account(User user, String name, String currency) {
+    public Account(User user, String name, Currency currency) {
         this.user = user;
         this.name = name;
         this.currency = currency;
         number = new CreditCardNumberGenerator().generate(BIN_NUMBER, 16);
     }
 
-    public Account(String name, String currency) {
+    public Account(String name, Currency currency) {
         this(null, name, currency);
     }
 

@@ -1,5 +1,6 @@
 package com.nlogax.banking.web.dto;
 
+import com.nlogax.banking.enums.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class AccountDto {
     private String id;
     private String name;
-    private String currency;
+    private Currency currency;
 }
