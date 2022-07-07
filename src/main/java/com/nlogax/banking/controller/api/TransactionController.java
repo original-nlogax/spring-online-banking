@@ -20,8 +20,7 @@ public class TransactionController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Transaction> get (@PathVariable Long id) {
         Transaction transaction = service.get(id);
-        if (transaction == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND); // or notFound().build() ?
-        else return ok(transaction);
+        return ok(transaction);
     }
 
     @PostMapping

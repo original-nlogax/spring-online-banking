@@ -3,6 +3,7 @@ package com.nlogax.banking.service;
 import com.nlogax.banking.exception.AccountDoesntExistException;
 import com.nlogax.banking.exception.AlreadyExistsException;
 import com.nlogax.banking.exception.NotEnoughMoneyException;
+import com.nlogax.banking.exception.TransactionDoesntExistException;
 import com.nlogax.banking.model.Account;
 import com.nlogax.banking.model.Transaction;
 import com.nlogax.banking.repository.TransactionRepository;
@@ -32,7 +33,10 @@ public class TransactionService {
     // maybe attribute based authority check?
     public Transaction get (Long id) {
         Optional<Transaction> account = repository.findById(id);
-        return account.orElse(null);
+        if (account.isEmpty())
+            throw new TransactionDoesntExistException();
+
+        return account.get();
     }
 
     public Transaction save (TransactionDto transactionDto) {
