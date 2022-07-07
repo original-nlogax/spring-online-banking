@@ -7,7 +7,9 @@ async function fillCurrencyList () {
     currencies.forEach(currency => {
         let item = document.createElement("div");
         item.className = "dropdown-item";
-        item.onclick = function () {setCurrency(currency);}
+        item.onclick = function () {
+            document.getElementById("accountEditCurrency").innerText = currency;
+        }
 
         let name = document.createElement("p");
         name.innerText = currency;
@@ -15,11 +17,6 @@ async function fillCurrencyList () {
 
         list.appendChild(item);
     })
-}
-
-function setCurrency (currency) {
-    document.getElementById("accountEditCurrency").innerHTML = currency;
-    document.getElementById("accountEditCurrencyInput").value = currency;   // hidden input, don't like how it works
 }
 
 async function getCurrencies () {

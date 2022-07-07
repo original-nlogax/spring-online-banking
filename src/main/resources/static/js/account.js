@@ -79,13 +79,14 @@ function openAccountEditModal (account) {
 }
 
 async function saveAccount () {
-    let form = document.getElementById("accountEditForm");
+    let fd = new FormData(document.getElementById("accountEditForm"));
     let response;
 
     if (currentEditedAccount === undefined) { // creating new account
-        response = await fetch('/accounts', {method:'post', body: new FormData(form)});
+        response = await fetch('/accounts', {method:'post', body: fd});
     } else {   // editing existing account
-        response = await fetch('/accounts/' + currentEditedAccount.id, {method:'put', body: new FormData(form)});
+        fd.append('currency', document.getElementById("accountEditCurrency").innerText);
+        response = await fetch('/accounts/' + currentEditedAccount.id, {method:'put', body: fd});
     }
 
     currentEditedAccount = undefined;
