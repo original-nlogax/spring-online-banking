@@ -3,25 +3,18 @@ let accountModal;
 
 fillAccountsCardDeck();
 
-async function fillAccountsCardDeck () {
-
+async function getAccounts () {
     let user = await getAuthorizedUser();
-    const deck = document.getElementById("accountsCardDeck");
+    return user.accounts;
+}
 
-    let addAccountButton;
-    deck.childNodes.forEach(function(card) {
-        if (card.id === "newAccountButton") addAccountButton = card;
-    });
+async function fillAccountsCardDeck () {
+    const accounts = await getAccounts();
+    const addAccountButton = document.getElementById("newAccountButton");
+    const deck = document.getElementById("accountsCardDeck");
     deck.textContent = '';
 
-    user.accounts.forEach(account => {
-        /*<button type="button" className="btn"
-                th:attr="onclick=|openAccountEditModal('${account}', '${account.getId()}', '${account.getNumber()}', '${account.getName()}', '${account.getCurrency()}')|">
-            <p th:text="${account.getName()}"></p>
-            <p th:text="${account.getFormattedNumber()}"></p>
-            <span className="text-success" th:text="${account.getBalance()} + ' ' + ${account.getCurrency()}"></span>
-        </button>*/
-
+    accounts.forEach(account => {
         let card = document.createElement("div");
         card.className = "card account card-body border-2 shadow rounded";
 
@@ -80,12 +73,12 @@ function openAccountEditModal (account) {
 
 async function saveAccount () {
     let fd = new FormData(document.getElementById("accountEditForm"));
-    let response;
+    fd.append('currency', document.getElementById("accountEditCurrency").innerText);
 
+    let response;
     if (currentEditedAccount === undefined) { // creating new account
         response = await fetch('/accounts', {method:'post', body: fd});
     } else {   // editing existing account
-        fd.append('currency', document.getElementById("accountEditCurrency").innerText);
         response = await fetch('/accounts/' + currentEditedAccount.id, {method:'put', body: fd});
     }
 

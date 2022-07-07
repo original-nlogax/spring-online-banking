@@ -74,15 +74,6 @@ public class AccountService  {
     }
 
     public void delete (Long id) {
-        /*
-        Optional<Account> account = repository.findById(id);
-        if (account.isPresent()) {
-            User accountHolder = account.get().getUser();
-            accountHolder.getAccounts().remove(account.get());
-            repository.delete(account.get());
-        }
-
-        return account.isPresent();*/
 
         Optional<Account> account = repository.findById(id);
         if (account.isEmpty())

@@ -5,7 +5,7 @@ async function fillCurrencyList () {
     const list = document.getElementById("currencyList");
 
     currencies.forEach(currency => {
-        let item = document.createElement("div");
+        let item = document.createElement("div");   // fixme a?
         item.className = "dropdown-item";
         item.onclick = function () {
             document.getElementById("accountEditCurrency").innerText = currency;

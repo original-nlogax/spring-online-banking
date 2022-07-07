@@ -1,37 +1,48 @@
-let currentPayFromAccountId;
+let currentFromAccountNumber;
+let paymentModal;
 
-async function transfer (from, to, amount) {
-    let fd = new FormData();
+fillPaymentAccountsList ();
 
-    fd.append( 'numberFrom', from );
-    fd.append( 'numberTo', to );
-    fd.append( 'amount', amount );
+async function fillPaymentAccountsList () {
+    const accounts = await getAccounts();
+    const list = document.getElementById("accountList");
+
+    accounts.forEach(account => {
+        let item = document.createElement("li");
+        item.className = "dropdown-item";
+        item.onclick = function () {setPaymentAccount(account)};
+        item.innerHTML = getFormattedAccountNumber(account.number) + ' ' + account.name +
+            " <span class='text-success'>(" + account.balance + " " + account.currency + ")</span>";
+
+        list.appendChild(item);
+    })
+}
+
+async function transfer () {
+    let fd = new FormData(document.getElementById("paymentForm"));
+    fd.append('numberFrom', currentFromAccountNumber);
+
 
     let response = await fetch('/transaction', {method:'post', body: fd}); //{'numberFrom': from, 'numberTo': to}
-
     if (response !== undefined) {
         if (response.ok) {
+            console.log("Successful transaction");
+            paymentModal.hide();
             return response;
         }
     }
 }
 
-function setPaymentAccount (accountId, formattedNumber, name, balance, currency) {
-    document.getElementById("currencySymbol").innerHTML = currency;
+function setPaymentAccount (account) {
+    document.getElementById("currencySymbol").innerText = account.currency;
     document.getElementById("accountDropdownButton").innerHTML =
-        formattedNumber + ' ' + name + " <span class='test-success'>(" + balance + " " + currency + ")</span>";
+        getFormattedAccountNumber(account.number) + ' ' + account.name +
+        " <span class='test-success'>(" + account.balance + " " + account.currency + ")</span>";
 
-    if (accountId === undefined) currentPayFromAccountId = -1;
-    else currentPayFromAccountId = accountId;
+    currentFromAccountNumber = account.number;
 }
 
-function openPaymentModal (accountId, number, name, currency) {
-
-
-    //document.getElementById("accountEditNumber").innerHTML = number;
-    //document.getElementById("accountEditName").value = name;
-    //document.getElementById("accountEditCurrency").value = currency;
-
-    const accountModal = new bootstrap.Modal(document.getElementById('paymentModal'), {});
-    accountModal.show();
+function openPaymentModal () {
+    paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'), {});
+    paymentModal.show();
 }

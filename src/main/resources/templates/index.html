@@ -1,5 +1,4 @@
-<html xmlns:th="http://www.thymeleaf.org">
-<html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="currentPage='home'">
 <head>
 	<link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"
 		  type='text/css'>
@@ -81,205 +80,93 @@
 	</style>
 </head>
 <body class="bg-gray-300">
-<div>
-	<!--navbar-->
-	<nav class="p-3 navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand" href="#">
-			<span class="m-1 material-symbols-outlined">savings</span>Online Banking</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-				aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarNav">
-			<ul class="navbar-nav">
-				<li class="nav-item active">
-					<a class="nav-link border-bottom border-2 border-success">Home</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/payments">Payments</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">History</a>
-				</li>
-			</ul>
-		</div>
-	</nav>
+	<div th:replace="~{fragments/navbar :: navbar}">Navbar</div>
 
-	<div class="p-3 m-3 shadow bg-white rounded">
-		<div>
-			<div class="input-group rounded">
-
-				<!-- clickable profile thumbnail -->
-				<button type="button" class="btn btn-light" onclick="fillProfileModal()" data-bs-toggle="modal" data-bs-target="#profileModal">
-					<img class="rounded-circle z-depth-2" alt="100x100"
-						 src="https://thumbs.dreamstime.com/b/cute-cat-portrait-square-photo-beautiful-white-closeup-105311158.jpg"
-						 data-holder-rendered="true" style="max-height: 48px; max-width: 48px">
-				</button>
-
-				<!-- search bar -->
-				<input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-					   aria-describedby="search-addon"/>
-				<span class="input-group-text border-0" id="search-addon">
-                <i class="fa fa-search"></i>
-                </span>
-			</div>
-		</div>
-
-		<!-- profile modal -->
-		<div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="profileModalLabel">User Profile</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-
-						<div class="container">
-							<div class="main-body">
-								<div class="row gutters-sm">
-									<div class="col-md-4 mb-3">
-										<div class="card">
-											<div class="card-body">
-												<div class="d-flex flex-column align-items-center text-center">
-													<img src="https://thumbs.dreamstime.com/b/cute-cat-portrait-square-photo-beautiful-white-closeup-105311158.jpg" alt="Admin" class="rounded-circle" width="150">
-													<div class="mt-3">
-														<h4 id="profileFirstLastName"></h4>
-														<p class="text-secondary mb-1"></p>
-														<p class="text-muted font-size-sm"></p>
-
-														<a id="profileAdminPanelButton" href="/adm" class="btn btn-info">Admin panel</a>
-														<a href="/logout" class="btn btn-outline-primary">Logout</a>
-													</div>
-												</div>
+	<!-- account edit modal -->
+	<div class="modal fade" id="accountEditModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="accountEditModalTitle">Account</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="container">
+						<div class="main-body">
+							<div class="row gutters-sm">
+								<div class="col-md-8">
+									<form id="accountEditForm" name='accountEditForm' method='POST'> <!--action="/accounts/edit"-->
+										<div class="row">
+											<div class="col-sm">
+												<h6 class="mb-0">Account number</h6>
+												<p id="accountNumber"></p>
+											</div>
+											<div class="col-sm">
+												<h6 class="mb-0">Balance</h6>
+												<p class="text-success" id="accountBalance"></p>
 											</div>
 										</div>
-									</div>
-									<div class="col-md-8">
-										<div class="card mb-3">
-											<div class="card-body">
-												<div class="row">
-													<div class="col-sm-3">
-														<h6 class="mb-0">Email</h6>
-													</div>
-													<div class="col-sm-9 text-secondary">
-														<p id="profileEmail"></p>
-													</div>
-												</div>
-												<div class="row">
-													<div class="col-sm-3">
-														<h6 class="mb-0">Phone number</h6>
-													</div>
-													<div class="col-sm-9 text-secondary">
-														<p id="profilePhoneNumber"></p>
-													</div>
-												</div>
-												<div class="row">
-													<div class="col-sm-12">
-														<a class="btn btn-info" onclick="editProfileData()">Edit</a>
-													</div>
+
+										<div class="row mt-2">
+											<label class="mb-1" for="accountEditName">Name</label>
+											<input name="name" id="accountEditName" class="form-control form-control-lg"
+												   placeholder="Enter name" />
+										</div>
+										<div class="row mt-3">
+											<label class="mb-1" for="accountEditCurrency">Currency</label>
+											<div class="btn-group">
+												<button id="accountEditCurrency" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													Select currency
+												</button>
+												<div class="dropdown-menu">
+													<div id="currencyList"></div>
 												</div>
 											</div>
+
+											<!--
+											<input name="currency" id="accountEditCurrency" class="form-control form-control-lg"
+												   placeholder="Select currency" />-->
 										</div>
-									</div>
+									</form>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-
-		<!-- account edit modal -->
-		<div class="modal fade" id="accountEditModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="accountEditModalTitle">Account</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<div class="container">
-							<div class="main-body">
-								<div class="row gutters-sm">
-									<div class="col-md-8">
-										<form id="accountEditForm" name='accountEditForm' method='POST'> <!--action="/accounts/edit"-->
-											<div class="row">
-												<div class="col-sm">
-													<h6 class="mb-0">Account number</h6>
-													<p id="accountNumber"></p>
-												</div>
-												<div class="col-sm">
-													<h6 class="mb-0">Balance</h6>
-													<p class="text-success" id="accountBalance"></p>
-												</div>
-											</div>
-
-											<div class="row mt-2">
-												<label class="mb-1" for="accountEditName">Name</label>
-												<input name="name" id="accountEditName" class="form-control form-control-lg"
-													   placeholder="Enter name" />
-											</div>
-											<div class="row mt-3">
-												<label class="mb-1" for="accountEditCurrency">Currency</label>
-												<div class="btn-group">
-													<button id="accountEditCurrency" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-														Select currency
-													</button>
-													<div class="dropdown-menu">
-														<div id="currencyList"></div>
-													</div>
-												</div>
-
-												<!--
-												<input name="currency" id="accountEditCurrency" class="form-control form-control-lg"
-													   placeholder="Select currency" />-->
-											</div>
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" onclick="saveAccount()">Save changes</button>
-						<button type="button" class="btn btn-outline-danger" onclick="deleteAccount()">Delete account</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="mt-4 p-3 bg-white rounded">
-			<h4>Accounts</h4>
-
-			<!-- accounts card deck -->
-			<div id="card-container" style="max-height: 250px">
-				<div class="container-fluid py-2">
-					<div id="accountsCardDeck" class="d-flex flex-row flex-nowrap">
-						<div id="newAccountButton" class="card account card-body border-2 shadow rounded">
-							<button type="button" class="btn" onclick="openAccountEditModal()">
-								<div class="d-flex justify-content-center">
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-										<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-									</svg>
-								</div>
-							</button>
-						</div>
-					</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="saveAccount()">Save changes</button>
+					<button type="button" class="btn btn-outline-danger" onclick="deleteAccount()">Delete account</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
-</div>
+	<div class="mt-4 p-3 bg-white rounded">
+		<h4>Accounts</h4>
+
+		<!-- accounts card deck -->
+		<div id="card-container" style="max-height: 250px">
+			<div class="container-fluid py-2">
+				<div id="accountsCardDeck" class="d-flex flex-row flex-nowrap">
+					<div id="newAccountButton" class="card account card-body border-2 shadow rounded">
+						<button type="button" class="btn" onclick="openAccountEditModal()">
+							<div class="d-flex justify-content-center">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+									<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+								</svg>
+							</div>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 <script type="text/javascript" th:src="@{/js/user.js}"></script>
 <script type="text/javascript" th:src="@{/js/account.js}"></script>
 <script type="text/javascript" th:src="@{/js/currency.js}"></script>
 <script type="text/javascript" th:src="@{/js/utils.js}"></script>
-
-<script type="text/javascript" th:src="@{/js/payments.js}"></script>
-
-</body>
 </html>
