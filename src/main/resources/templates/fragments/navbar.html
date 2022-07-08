@@ -75,27 +75,36 @@
 										<div class="col-md-8">
 											<div class="card mb-3">
 												<div class="card-body">
-													<div class="row">
-														<div class="col-sm-3">
-															<h6 class="mb-0">Email</h6>
+													<form id="profileForm">
+														<div class="row">
+															<div class="col-sm-3">
+																<h6 class="mb-0">Email</h6>
+															</div>
+															<div class="col-sm-9 text-secondary">
+																<p id="profileEmail"></p>
+																<input hidden="true" id="profileEmailInput" name="email" class="form-control"
+																	   placeholder="Enter email" />
+															</div>
 														</div>
-														<div class="col-sm-9 text-secondary">
-															<p id="profileEmail"></p>
+														<hr>
+														<div class="row">
+															<div class="col-sm-3">
+																<h6 class="mb-0">Phone number</h6>
+															</div>
+															<div class="col-sm-9 text-secondary">
+																<p id="profilePhoneNumber"></p>
+																<input hidden="true" id="profilePhoneNumberInput"  name="phoneNumber" class="form-control"
+																	   placeholder="Enter phone number" />
+															</div>
 														</div>
-													</div>
-													<div class="row">
-														<div class="col-sm-3">
-															<h6 class="mb-0">Phone number</h6>
+														<hr>
+														<div class="row">
+															<div class="col-sm-12">
+																<a id="editProfileButton" class="btn btn-info" onclick="editProfile()">Edit</a>
+																<a hidden="true" id="saveProfileButton" class="btn btn-info" onclick="saveProfile()">Save</a>
+															</div>
 														</div>
-														<div class="col-sm-9 text-secondary">
-															<p id="profilePhoneNumber"></p>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-sm-12">
-															<a class="btn btn-info" onclick="editProfileData()">Edit</a>
-														</div>
-													</div>
+													</form>
 												</div>
 											</div>
 										</div>

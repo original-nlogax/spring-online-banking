@@ -2,7 +2,7 @@ package com.nlogax.banking.controller.api;
 
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.service.UserService;
-import com.nlogax.banking.web.dto.UserRegistrationDto;
+import com.nlogax.banking.web.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +30,15 @@ public class UsersController {
         return ok().build();
     }
 
+    @PutMapping()
+    public ResponseEntity<Void> update (UserDto data) {
+        service.update(data);
+        return ok().build();
+    }
+
+
     @PostMapping
-    public ResponseEntity<Void> register (@ModelAttribute("userRegistrationDto") UserRegistrationDto data) {  // todo validation
+    public ResponseEntity<Void> register (@ModelAttribute("userRegistrationDto") UserDto data) {  // todo validation
         service.save(data);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

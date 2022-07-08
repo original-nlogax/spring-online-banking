@@ -5,7 +5,7 @@ import com.nlogax.banking.model.Role;
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.repository.UserRepository;
 import com.nlogax.banking.utils.Utils;
-import com.nlogax.banking.web.dto.UserRegistrationDto;
+import com.nlogax.banking.web.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,10 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
-    public User save(UserRegistrationDto registrationDto) {
+    @Autowired
+    private SessionService sessionService;
+
+    public User save(UserDto registrationDto) {
         List<Role> roles = new ArrayList<>();
 
         if (registrationDto.getEmail().equals("123")) roles.add(new Role("ROLE_ADMIN"));
@@ -51,6 +54,25 @@ public class UserService {
         return user;
     }
 
+    public void update (UserDto userDto) {
+        /*
+        if (userDto.getId() == null) {
+            // if accountDto has no id, then it means that it is absent from db
+            throw new UserDoesntExistException();
+        }*/
+
+        /*
+        Long id = Long.parseLong(userDto.getId());
+        Optional<User> user = repository.findById(id);
+        if (user.isEmpty())
+            throw new UserDoesntExistException();*/
+        User user = sessionService.getAuthUser();
+
+        user.setEmail(userDto.getEmail());
+        user.setPhoneNumber(userDto.getPhoneNumber());
+        repository.save(user);
+    }
+
     public void delete (Long id) {
         Optional<User> user = repository.findById(id);
         if (user.isEmpty())
@@ -58,13 +80,5 @@ public class UserService {
 
         user.get().getAccounts().forEach(account -> account.setUser(null));
         repository.delete(user.get());
-        /*
-        Optional<User> user = repository.findById(id);
-        if (user.isPresent()) {
-            user.get().getAccounts().forEach(account -> account.setUser(null));
-            repository.delete(user.get());
-        }
-
-        return user.isPresent();*/
     }
 }
