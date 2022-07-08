@@ -8,14 +8,30 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping("/transaction")
+@RequestMapping("/transactions")
 public class TransactionController {
 
     @Autowired
     TransactionService service;
+
+    // get all transactions of a single account
+    @GetMapping(value="/account/{number}")
+    public ResponseEntity<List<Transaction>> getAccountTransactions (@PathVariable String number) {
+        List<Transaction> transactions = service.getAccountTransactions(number);
+        return ok(transactions);
+    }
+
+    // get all transactions of a logged user accounts
+    @GetMapping(value="/user")
+    public ResponseEntity<List<Transaction>> getUserTransactions () {
+        List<Transaction> transactions = service.getUserTransactions();
+        return ok(transactions);
+    }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Transaction> get (@PathVariable Long id) {

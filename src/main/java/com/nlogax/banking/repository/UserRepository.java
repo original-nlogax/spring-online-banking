@@ -8,8 +8,6 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    // TODO findByEmail(String email); somehow works? i don't understand why
-    // we don't have any implementation of it
-
+    // works, because JpaRepository gets a field with exact name "email" from db
     List<User> findByEmail(String email);
 }

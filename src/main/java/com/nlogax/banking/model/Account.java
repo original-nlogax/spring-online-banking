@@ -21,15 +21,16 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private float balance;
-    private Currency currency;
-    private String number;
 
     //@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  // todo why does EAGER crashes?
     @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
+
+    private String name;
+    private Currency currency;
+    private float balance;
+    private String number;
 
     public Account(User user, String name, Currency currency) {
         this.user = user;

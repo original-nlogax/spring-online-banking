@@ -1,17 +1,18 @@
 package com.nlogax.banking.service;
 
-import com.nlogax.banking.exception.AccountDoesntExistException;
 import com.nlogax.banking.exception.AlreadyExistsException;
 import com.nlogax.banking.exception.NotEnoughMoneyException;
 import com.nlogax.banking.exception.TransactionDoesntExistException;
 import com.nlogax.banking.model.Account;
 import com.nlogax.banking.model.Transaction;
+import com.nlogax.banking.model.User;
 import com.nlogax.banking.repository.TransactionRepository;
 import com.nlogax.banking.web.dto.TransactionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 @Service
 public class TransactionService {
@@ -39,44 +40,54 @@ public class TransactionService {
         return account.get();
     }
 
+    public List<Transaction> getAccountTransactions(String number) {
+        List<Transaction> transactions = repository.numberFrom(number);
+        transactions.addAll(repository.numberTo(number));
+        transactions.sort(Comparator.comparing(Transaction::getDate));
+        return transactions;
+    }
+
+    // returning all of user transactions, removing duplicates by using HashSet
+    public List<Transaction> getUserTransactions() {
+        HashSet<Transaction> transactions = new HashSet<>();
+        User user = sessionService.getAuthUser();
+        user.getAccounts().forEach(account -> transactions.addAll(getAccountTransactions(account.getNumber())));
+        return transactions.stream().toList();
+    }
+
     public Transaction save (TransactionDto transactionDto) {
         if (transactionDto.getId() != null) {
-            // if accountDto has id, then it means that it is already saved in db
             throw new AlreadyExistsException();
         }
 
-        // suppose we can transfer money only between our bank accounts
-        if (!accountService.existsByNumber(transactionDto.getNumberTo()))
-            throw new AccountDoesntExistException("Destination account with number " + transactionDto.getNumberTo() + " doesn't exist");
-
-        // money printer for admins
+        /*
         if (sessionService.getAuthUser().isAdmin() && transactionDto.getNumberFrom().equals("MONEY PRINTER")) {
+            Account printTo = accountService.getByNumber(transactionDto.getNumberTo());
             Transaction transaction = new Transaction(
-                    transactionDto.getNumberFrom(), transactionDto.getNumberTo(), transactionDto.getAmount()
+                    ZonedDateTime.now(), "MONEY PRINTER", printTo.getNumber(),
+                    transactionDto.getAmount(), Currency.USD
             );
-            accountService.getByNumber(transactionDto.getNumberTo()).deposit(transactionDto.getAmount());
+            printTo.deposit(transactionDto.getAmount());
             repository.save(transaction);
             return transaction;
-        }
+        }*/
 
-        if (!accountService.existsByNumber(transactionDto.getNumberFrom()))
-            throw new AccountDoesntExistException("Source account with number " + transactionDto.getNumberFrom() + " doesn't exist");
+        Account origin = accountService.getByNumber(transactionDto.getNumberFrom());
+        Account destination = accountService.getByNumber(transactionDto.getNumberTo());
 
-        Transaction transaction = new Transaction(
-                transactionDto.getNumberFrom(), transactionDto.getNumberTo(), transactionDto.getAmount()
-        );
-
-        Account accountFrom = accountService.getByNumber(transactionDto.getNumberFrom());
-        Account accountTo = accountService.getByNumber(transactionDto.getNumberTo());
-
-        if (accountFrom.getBalance() < transactionDto.getAmount()) {
+        if (origin.getBalance() < transactionDto.getAmount()) {
             throw new NotEnoughMoneyException();
         }
 
-        accountFrom.withdraw(transaction.getAmount());
-        accountTo.deposit(transaction.getAmount());
+        Transaction transaction = new Transaction(
+                ZonedDateTime.now(), origin.getNumber(), destination.getNumber(),
+                transactionDto.getAmount(), origin.getCurrency()
+        );
 
+        origin.withdraw(transaction.getAmount());
+        destination.deposit(transaction.getAmount());
         repository.save(transaction);
         return transaction;
     }
+
 }

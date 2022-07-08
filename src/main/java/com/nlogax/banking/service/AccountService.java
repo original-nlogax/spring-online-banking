@@ -28,7 +28,11 @@ public class AccountService  {
     }
 
     public Account getByNumber (String number) {
-        return repository.getByNumber(number);
+        Optional<Account> account = repository.getByNumber(number);
+        if (account.isEmpty())
+            throw new AccountDoesntExistException();
+
+        return account.get();
     }
 
     public Account get (Long id) {

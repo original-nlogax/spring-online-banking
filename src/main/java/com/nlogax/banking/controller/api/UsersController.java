@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.ResponseEntity.*;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/users")
@@ -16,12 +16,6 @@ public class UsersController {
 
     @Autowired
     UserService service;
-
-    /*
-    @GetMapping
-    public List<User> getAll () {
-        return service.getAll();
-    }*/
 
     //todo @SecurityRequirement(name = "role?")
     @GetMapping(value = "/{id}")

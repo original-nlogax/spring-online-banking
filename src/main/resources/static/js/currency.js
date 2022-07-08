@@ -1,5 +1,3 @@
-fillCurrencyList ();
-
 async function fillCurrencyList () {
     const currencies = await getCurrencies();
     const list = document.getElementById("currencyList");

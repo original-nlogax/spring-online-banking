@@ -1,8 +1,6 @@
 let currentEditedAccount;
 let accountModal;
 
-fillAccountsCardDeck();
-
 async function getAccounts () {
     let user = await getAuthorizedUser();
     return user.accounts;

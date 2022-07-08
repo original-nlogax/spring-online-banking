@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-// numberFrom and numberTo -- from and to db
 public class TransactionDto {
     private String id;
     private String numberFrom;
