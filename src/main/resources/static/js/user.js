@@ -1,8 +1,22 @@
+//let profileFirstLastName, profileFirstName, profileLastName, profileEmail, profilePhoneNumber;
+//let profileFirstNameInput, profileLastNameInput, profileEmailInput, profilePhoneNumberInput;
+
+
 async function fillProfileModal () {
     let user = await getAuthorizedUser();
+
+    //fixme bad code
     document.getElementById("profileFirstLastName").innerText = user.firstName + ' ' + user.lastName;
+    document.getElementById("profileFirstName").innerText = user.firstName;
+    document.getElementById("profileLastName").innerText = user.lastName;
     document.getElementById("profileEmail").innerText = user.email;
     document.getElementById("profilePhoneNumber").innerText = user.phoneNumber;
+
+    document.getElementById("profileFirstNameInput").value = user.firstName;
+    document.getElementById("profileLastNameInput").value = user.lastName;
+    document.getElementById("profileEmailInput").value = user.email;
+    document.getElementById("profilePhoneNumberInput").value = user.phoneNumber;
+
     //document.getElementById("profileAdminPanelButton").hidden = !user.roles.includes("ROLE_ADMIN");
 }
 
@@ -55,14 +69,19 @@ async function registerUser () {
     }
 }
 
+// fixme how to avoid this
 function setProfileEdit (isEdit) {
     document.getElementById("profileEmail").hidden
         = document.getElementById("profilePhoneNumber").hidden
+        = document.getElementById("profileFirstName").hidden
+        = document.getElementById("profileLastName").hidden
         = document.getElementById("editProfileButton").hidden
         = isEdit;
 
     document.getElementById("profileEmailInput").hidden
         = document.getElementById("profilePhoneNumberInput").hidden
+        = document.getElementById("profileFirstNameInput").hidden
+        = document.getElementById("profileLastNameInput").hidden
         = document.getElementById("saveProfileButton").hidden
         = !isEdit;
 }
@@ -73,11 +92,6 @@ function editProfile () {
 
 async function saveProfile () {
     let form = document.getElementById("profileForm");
-
-    // Display the key/value pairs
-    for (var pair of new FormData(form).entries()) {
-        console.log(pair[0]+ ', ' + pair[1]);
-    }
 
     const response = await fetch('/users', {
         method:'put',
@@ -90,7 +104,6 @@ async function saveProfile () {
         if (response.ok) {
             setProfileEdit(false);
             fillProfileModal ();
-            return response.json();
         }
     }
 }

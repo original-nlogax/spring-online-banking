@@ -1,4 +1,4 @@
-package com.nlogax.banking.web.dto;
+package com.nlogax.banking.dto;
 
 import com.nlogax.banking.enums.Currency;
 import lombok.AllArgsConstructor;

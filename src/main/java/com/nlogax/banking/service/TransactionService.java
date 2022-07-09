@@ -7,7 +7,7 @@ import com.nlogax.banking.model.Account;
 import com.nlogax.banking.model.Transaction;
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.repository.TransactionRepository;
-import com.nlogax.banking.web.dto.TransactionDto;
+import com.nlogax.banking.dto.TransactionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

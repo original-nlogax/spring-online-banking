@@ -1,4 +1,4 @@
-package com.nlogax.banking.web.dto;
+package com.nlogax.banking.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

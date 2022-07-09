@@ -5,7 +5,7 @@ import com.nlogax.banking.exception.AlreadyExistsException;
 import com.nlogax.banking.model.Account;
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.repository.AccountRepository;
-import com.nlogax.banking.web.dto.AccountDto;
+import com.nlogax.banking.dto.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

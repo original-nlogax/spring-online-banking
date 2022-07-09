@@ -2,7 +2,7 @@ package com.nlogax.banking.controller.api;
 
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.service.UserService;
-import com.nlogax.banking.web.dto.UserDto;
+import com.nlogax.banking.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

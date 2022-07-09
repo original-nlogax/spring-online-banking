@@ -5,7 +5,7 @@ import com.nlogax.banking.model.Role;
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.repository.UserRepository;
 import com.nlogax.banking.utils.Utils;
-import com.nlogax.banking.web.dto.UserDto;
+import com.nlogax.banking.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,21 +55,12 @@ public class UserService {
     }
 
     public void update (UserDto userDto) {
-        /*
-        if (userDto.getId() == null) {
-            // if accountDto has no id, then it means that it is absent from db
-            throw new UserDoesntExistException();
-        }*/
-
-        /*
-        Long id = Long.parseLong(userDto.getId());
-        Optional<User> user = repository.findById(id);
-        if (user.isEmpty())
-            throw new UserDoesntExistException();*/
         User user = sessionService.getAuthUser();
 
         user.setEmail(userDto.getEmail());
         user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
         repository.save(user);
     }
 

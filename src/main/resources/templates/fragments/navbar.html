@@ -65,8 +65,8 @@
 															<p class="text-secondary mb-1"></p>
 															<p class="text-muted font-size-sm"></p>
 
-															<a id="profileAdminPanelButton" href="/adm" class="btn btn-info">Admin panel</a>
-															<a href="/logout" class="btn btn-outline-primary">Logout</a>
+															<button id="profileAdminPanelButton" href="/adm" class="btn btn-info">Admin panel</button>
+															<button href="/logout" class="mt-2 btn btn-outline-primary">Logout</button>
 														</div>
 													</div>
 												</div>
@@ -76,6 +76,28 @@
 											<div class="card mb-3">
 												<div class="card-body">
 													<form id="profileForm">
+														<div class="row">
+															<div class="col-sm-3">
+																<h6 class="mb-0">First Name</h6>
+															</div>
+															<div class="col-sm-9 text-secondary">
+																<p id="profileFirstName"></p>
+																<input hidden="true" id="profileFirstNameInput" name="firstName" class="form-control"
+																	   placeholder="Enter first name" />
+															</div>
+														</div>
+														<hr>
+														<div class="row">
+															<div class="col-sm-3">
+																<h6 class="mb-0">Last Name</h6>
+															</div>
+															<div class="col-sm-9 text-secondary">
+																<p id="profileLastName"></p>
+																<input hidden="true" id="profileLastNameInput" name="lastName" class="form-control"
+																	   placeholder="Enter last name" />
+															</div>
+														</div>
+														<hr>
 														<div class="row">
 															<div class="col-sm-3">
 																<h6 class="mb-0">Email</h6>
