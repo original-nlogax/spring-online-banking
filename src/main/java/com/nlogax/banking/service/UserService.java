@@ -30,7 +30,8 @@ public class UserService {
 
         User user = new User(
                 Utils.capitalizeFirstLetter(registrationDto.getFirstName()),
-                Utils.capitalizeFirstLetter(registrationDto.getLastName()), registrationDto.getEmail(), registrationDto.getPhoneNumber(),
+                Utils.capitalizeFirstLetter(registrationDto.getLastName()),
+                registrationDto.getEmail(), registrationDto.getPhoneNumber(),
                 registrationDto.getPassword(), roles, new ArrayList<>());
 
         System.out.println("Saving new user [" + registrationDto.getEmail() + "]");

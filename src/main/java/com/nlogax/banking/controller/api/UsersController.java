@@ -1,12 +1,14 @@
 package com.nlogax.banking.controller.api;
 
+import com.nlogax.banking.dto.UserDto;
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.service.UserService;
-import com.nlogax.banking.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -23,6 +25,13 @@ public class UsersController {
         User user = service.get(id);
         return ok(user);
     }
+
+    @GetMapping(value = "/")
+    public ResponseEntity<List<User>> getAll () {
+        List<User> users = service.getAll();
+        return ok(users);
+    }
+
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete (@PathVariable Long id) {
