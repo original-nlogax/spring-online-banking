@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 @Data
@@ -20,10 +21,10 @@ public class Transaction {
     private ZonedDateTime date;
     private String numberFrom;
     private String numberTo;
-    private float amount;
+    private BigDecimal amount;
     private Currency currency;
 
-    public Transaction(ZonedDateTime date, String numberFrom, String numberTo, float amount, Currency currency) {
+    public Transaction(ZonedDateTime date, String numberFrom, String numberTo, BigDecimal amount, Currency currency) {
         this.date = date;
         this.numberFrom = numberFrom;
         this.numberTo = numberTo;

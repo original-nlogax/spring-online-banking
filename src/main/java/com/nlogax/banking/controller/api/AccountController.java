@@ -1,13 +1,15 @@
 package com.nlogax.banking.controller.api;
 
+import com.nlogax.banking.dto.AccountDto;
 import com.nlogax.banking.model.Account;
 import com.nlogax.banking.service.AccountService;
-import com.nlogax.banking.dto.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -23,7 +25,7 @@ public class AccountController {
         return service.exists(id) ? ok().build() : notFound().build();
     }*/
 
-    //todo @SecurityRequirement(name = "role?")
+    @Secured("ROLE_ADMIN")
     @GetMapping(value = "/{id}")
     public ResponseEntity<Account> get (@PathVariable Long id) {
         Account account = service.get(id);
@@ -43,10 +45,8 @@ public class AccountController {
     }
 
     @DeleteMapping(value = "/{id}")
-    //    on every:
-    //@ResponseStatus(NO_CONTENT)
-    //@SecurityRequirement(name = "token")
-    //@Operation(summary = "Delete user")
+    @Secured("ROLE_ADMIN")
+    @ResponseStatus(NO_CONTENT)
     public ResponseEntity<Void> delete (@PathVariable Long id) {
         service.delete(id);
         return ok().build();

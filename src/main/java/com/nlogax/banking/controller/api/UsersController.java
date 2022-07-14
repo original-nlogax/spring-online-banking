@@ -6,6 +6,7 @@ import com.nlogax.banking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,20 +20,21 @@ public class UsersController {
     @Autowired
     UserService service;
 
-    //todo @SecurityRequirement(name = "role?")
+    @Secured("ROLE_ADMIN")
     @GetMapping(value = "/{id}")
     public ResponseEntity<User> get (@PathVariable Long id) {
         User user = service.get(id);
         return ok(user);
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping(value = "/")
     public ResponseEntity<List<User>> getAll () {
         List<User> users = service.getAll();
         return ok(users);
     }
 
-
+    @Secured("ROLE_ADMIN")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete (@PathVariable Long id) {
         service.delete(id);

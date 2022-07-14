@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Data
 @Entity
@@ -29,7 +30,7 @@ public class Account {
 
     private String name;
     private Currency currency;
-    private float balance;
+    private BigDecimal balance;
     private String number;
 
     public Account(User user, String name, Currency currency) {
@@ -43,11 +44,11 @@ public class Account {
         this(null, name, currency);
     }
 
-    public void deposit (float amount) {
-        this.balance += amount;
+    public void deposit (BigDecimal amount) {
+        balance = balance.add(amount);
     }
 
-    public void withdraw (float amount) {
-        this.balance -= amount;
+    public void withdraw (BigDecimal amount) {
+        balance = balance.subtract(amount);
     }
 }

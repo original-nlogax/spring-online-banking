@@ -1,18 +1,22 @@
 package com.nlogax.banking.service;
 
+import com.nlogax.banking.dto.TransactionDto;
 import com.nlogax.banking.exception.AlreadyExistsException;
 import com.nlogax.banking.exception.NotEnoughMoneyException;
 import com.nlogax.banking.exception.TransactionDoesntExistException;
+import com.nlogax.banking.exception.UserUnauthorizedException;
 import com.nlogax.banking.model.Account;
 import com.nlogax.banking.model.Transaction;
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.repository.TransactionRepository;
-import com.nlogax.banking.dto.TransactionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionService {
@@ -30,8 +34,6 @@ public class TransactionService {
         return repository.existsById(id);
     }
 
-    // todo should be accessible only for admins
-    // maybe attribute based authority check?
     public Transaction get (Long id) {
         Optional<Transaction> account = repository.findById(id);
         if (account.isEmpty())
@@ -41,13 +43,19 @@ public class TransactionService {
     }
 
     public List<Transaction> getAccountTransactions(String number) {
+        User authUser = sessionService.getAuthUser();
+
+        boolean authority = authUser.isAdmin() || accountService.getByNumber(number).getUser().getId().equals(authUser.getId());
+        if (!authority)
+            throw new UserUnauthorizedException("Account doesn't belong to logged user");
+
         List<Transaction> transactions = repository.numberFrom(number);
         transactions.addAll(repository.numberTo(number));
         transactions.sort(Comparator.comparing(Transaction::getDate));
         return transactions;
     }
 
-    // returning all of user transactions, removing duplicates by using HashSet
+    // returning all of logged user transactions, removing duplicates by using HashSet
     public List<Transaction> getUserTransactions() {
         HashSet<Transaction> transactions = new HashSet<>();
         User user = sessionService.getAuthUser();
@@ -75,7 +83,7 @@ public class TransactionService {
         Account origin = accountService.getByNumber(transactionDto.getNumberFrom());
         Account destination = accountService.getByNumber(transactionDto.getNumberTo());
 
-        if (origin.getBalance() < transactionDto.getAmount()) {
+        if (origin.getBalance().compareTo(transactionDto.getAmount()) < 0) {
             throw new NotEnoughMoneyException();
         }
 

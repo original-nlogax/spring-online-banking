@@ -4,21 +4,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.FORBIDDEN)
-public class UserUnauthenticatedException extends RuntimeException {
+public class UserUnauthorizedException extends RuntimeException {
 
-    public UserUnauthenticatedException() {
+    public UserUnauthorizedException() {
         super();
     }
 
-    public UserUnauthenticatedException(String message, Throwable cause) {
+    public UserUnauthorizedException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public UserUnauthenticatedException(String message) {
+    public UserUnauthorizedException(String message) {
         super(message);
     }
 
-    public UserUnauthenticatedException(Throwable cause) {
+    public UserUnauthorizedException(Throwable cause) {
         super(cause);
     }
 }

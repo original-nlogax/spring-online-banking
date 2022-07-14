@@ -46,7 +46,6 @@ async function getTransactions () {
     let response = await fetch('/transactions/user/', {method:'get'});
     if (response !== undefined) {
         if (response.ok) {
-            console.log("Successful get");
             return response.json();
         }
     }

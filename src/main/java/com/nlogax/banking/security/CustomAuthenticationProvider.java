@@ -9,8 +9,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,8 +21,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        PasswordEncoder encoder =
-                PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        //PasswordEncoder encoder =
+        //        PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
         String name = authentication.getName();
         String password = authentication.getCredentials().toString();
@@ -40,14 +38,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             //if (encoder.matches(password, user.get(0).getPassword())) {
             if (password.equals(user.getPassword())) {
 
-                // todo  List<GrantedAuthority> -- why type mismatch?
                 List<SimpleGrantedAuthority> authorities =
                         user.getRoles().stream().map(r -> new SimpleGrantedAuthority(r.getName())).toList();
                 
                 System.out.println("User [" + user.getEmail() + "] has logged in with roles: [" +
-                        authorities.stream().map(Object::toString).reduce("", String::concat) + "]");   // TODO separate by comma
+                        authorities.stream().map(Object::toString).reduce("", String::concat) + "]");
 
-                //return new UsernamePasswordAuthenticationToken(user, password, authorities);
                 return new UsernamePasswordAuthenticationToken(user, null, authorities);
             } else {
                 throw new BadCredentialsException("Invalid password");
