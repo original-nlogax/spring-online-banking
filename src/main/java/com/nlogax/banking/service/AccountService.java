@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
@@ -54,7 +55,7 @@ public class AccountService  {
 
         Account account;
         account = new Account(user, accountDto.getName(), accountDto.getCurrency());
-        account.setBalance(0);
+        account.setBalance(BigDecimal.ZERO);
         user.getAccounts().add(account);
 
         repository.save(account);
