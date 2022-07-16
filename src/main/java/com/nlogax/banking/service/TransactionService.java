@@ -42,9 +42,8 @@ public class TransactionService {
         return account.get();
     }
 
-    public List<Transaction> getAccountTransactions(String number) {
+    public List<Transaction> getAccountTransactions (String number) {
         User authUser = sessionService.getAuthUser();
-
         boolean authority = authUser.isAdmin() || accountService.getByNumber(number).getUser().getId().equals(authUser.getId());
         if (!authority)
             throw new UserUnauthorizedException("Account doesn't belong to logged user");
@@ -55,10 +54,15 @@ public class TransactionService {
         return transactions;
     }
 
-    // returning all of logged user transactions, removing duplicates by using HashSet
-    public List<Transaction> getUserTransactions() {
+    // get transactions from all user accounts, removing duplicates by using HashSet
+    public List<Transaction> getUserTransactions (User user) {
+        User authUser = sessionService.getAuthUser();
+
+        boolean authority = authUser.isAdmin() || user.getEmail().equals(authUser.getEmail());
+        if (!authority)
+            throw new UserUnauthorizedException("Account doesn't belong to logged user");
+
         HashSet<Transaction> transactions = new HashSet<>();
-        User user = sessionService.getAuthUser();
         user.getAccounts().forEach(account -> transactions.addAll(getAccountTransactions(account.getNumber())));
         return transactions.stream().toList();
     }

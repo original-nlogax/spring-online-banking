@@ -92,9 +92,10 @@ function editProfile () {
 
 async function saveProfile () {
     let form = document.getElementById("profileForm");
+    let user = await getAuthorizedUser ();
 
-    const response = await fetch('/users', {
-        method:'put',
+    const response = await fetch('/users/' + user.id, {
+        method: 'put',
         body: new FormData(form),
     }).catch(err => {
         console.log(err);

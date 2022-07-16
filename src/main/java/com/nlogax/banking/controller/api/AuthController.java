@@ -22,4 +22,11 @@ public class AuthController {
         User user = sessionService.getAuthUser();
         return ok(user);
     }
+
+
+
+    /*
+    public static boolean can (boolean ) {
+
+    }*/
 }

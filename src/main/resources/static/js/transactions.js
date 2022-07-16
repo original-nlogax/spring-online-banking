@@ -43,7 +43,8 @@ async function fillTransactionHistory () {
 }
 
 async function getTransactions () {
-    let response = await fetch('/transactions/user/', {method:'get'});
+    let user = await getAuthorizedUser();
+    let response = await fetch('/transactions/user/'+user.id, {method:'get'});
     if (response !== undefined) {
         if (response.ok) {
             return response.json();

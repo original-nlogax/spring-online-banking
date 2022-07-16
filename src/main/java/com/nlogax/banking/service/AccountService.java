@@ -62,7 +62,8 @@ public class AccountService  {
         return account;
     }
 
-    public void update (AccountDto accountDto) {
+    public void update (Account account, AccountDto accountDto) {
+        /*
         if (accountDto.getId() == null) {
             // if accountDto has no id, then it means that it is absent from db
             throw new AccountDoesntExistException();
@@ -71,15 +72,14 @@ public class AccountService  {
         Long id = Long.parseLong(accountDto.getId());
         Optional<Account> account = repository.findById(id);
         if (account.isEmpty())
-            throw new AccountDoesntExistException();
+            throw new AccountDoesntExistException();*/
 
-        account.get().setName(accountDto.getName());
-        account.get().setCurrency(accountDto.getCurrency());
-        repository.save(account.get());
+        account.setName(accountDto.getName());
+        account.setCurrency(accountDto.getCurrency());
+        repository.save(account);
     }
 
     public void delete (Long id) {
-
         Optional<Account> account = repository.findById(id);
         if (account.isEmpty())
             throw new AccountDoesntExistException();

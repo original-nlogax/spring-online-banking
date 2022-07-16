@@ -41,12 +41,13 @@ public class UsersController {
         return ok().build();
     }
 
-    @PutMapping()
-    public ResponseEntity<Void> update (UserDto data) {
-        service.update(data);
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Void> update (@PathVariable Long id, UserDto data) {
+        System.out.println(id);
+        User user = service.get(id);
+        service.update(user, data);
         return ok().build();
     }
-
 
     @PostMapping
     public ResponseEntity<Void> register (@ModelAttribute("userRegistrationDto") UserDto data) {  // todo validation

@@ -1,0 +1,68 @@
+Java Spring Online Banking
+API
+
+1. USERS:
+GET /users
+    get list of all registered users
+    permissions: for admins
+
+GET /users/{id}
+    get user
+    permissions: for admins
+
+PUT /users/{id}
+    update user profile data
+    permissions: non-admin users can only update their own profile data
+    body: user object with parameters: 
+        email, firstName, lastName, phoneNumber, password
+
+POST /users
+    register new user
+    body: email, firstName, lastName, phoneNumber, password
+
+DELETE /users/{id}
+    delete user
+    permissions: for admins
+
+
+2. ACCOUNTS (wallets):
+GET /accounts/{id}
+    get account
+    permissions: for admins
+
+PUT /accounts/{id}
+    update account
+    permissions: non-admin users can only update their own accounts
+    body: name, currency
+
+POST /accounts
+    create new account
+    body: name, currency
+
+DELETE /accounts/{id}
+    delete account
+    permissions: non-admin users can only delete their own accounts
+
+
+3. TRANSACTIONS:
+GET /transactions/{id}
+    get transaction
+    permissions: for admins
+
+GET /transactions/account/{account number}
+    get all transactions of a single account
+    permissions: non-admin users can only get transactions of their accounts
+
+GET /transactions/user/{id}
+    get all transactions of a single account
+    permissions: non-admin users can only get their own transactions
+
+
+4. AUTH:
+GET /auth/user
+    get logged user
+
+
+5. CURRENCY:
+GET /currency
+    get currency list

@@ -34,12 +34,13 @@ public class AccountController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Void> update (@PathVariable Long id, @ModelAttribute("accountDto") AccountDto data) {
-        service.update(data);
+        Account account = service.get(id);
+        service.update(account, data);
         return ok().build();
     }
 
     @PostMapping
-    public ResponseEntity<Void> add (@ModelAttribute("accountDto") AccountDto data) {
+    public ResponseEntity<Void> create (@ModelAttribute("accountDto") AccountDto data) {
         service.save(data);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

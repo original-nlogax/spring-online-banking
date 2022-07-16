@@ -50,13 +50,14 @@ public class UserService {
         return user.get();
     }
 
+    /*
     public User getByEmail (String email) {
         User user = repository.findByEmail(email).get(0);
         return user;
-    }
+    }*/
 
-    public void update (UserDto userDto) {
-        User user = sessionService.getAuthUser();
+    public void update (User user, UserDto userDto) {
+        //User user = sessionService.getAuthUser();
 
         user.setEmail(userDto.getEmail());
         user.setPhoneNumber(userDto.getPhoneNumber());
