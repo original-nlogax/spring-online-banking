@@ -51,7 +51,7 @@ public class UsersController {
 
     @PostMapping
     public ResponseEntity<Void> register (@ModelAttribute("userRegistrationDto") UserDto data) {  // todo validation
-        service.save(data);
+        service.register(data);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

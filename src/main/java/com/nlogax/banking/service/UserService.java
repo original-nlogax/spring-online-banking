@@ -1,11 +1,12 @@
 package com.nlogax.banking.service;
 
+import com.nlogax.banking.dto.UserDto;
 import com.nlogax.banking.exception.UserDoesntExistException;
 import com.nlogax.banking.model.Role;
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.repository.UserRepository;
+import com.nlogax.banking.security.CustomAuthenticationProvider;
 import com.nlogax.banking.utils.Utils;
-import com.nlogax.banking.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,22 +20,19 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
-    @Autowired
-    private SessionService sessionService;
-
-    public User save(UserDto registrationDto) {
+    public User register(UserDto dto) {
         List<Role> roles = new ArrayList<>();
 
-        if (registrationDto.getEmail().equals("123")) roles.add(new Role("ROLE_ADMIN"));
+        if (dto.getEmail().equals("123")) roles.add(new Role("ROLE_ADMIN"));
         roles.add(new Role("ROLE_USER"));
 
         User user = new User(
-                Utils.capitalizeFirstLetter(registrationDto.getFirstName()),
-                Utils.capitalizeFirstLetter(registrationDto.getLastName()),
-                registrationDto.getEmail(), registrationDto.getPhoneNumber(),
-                registrationDto.getPassword(), roles, new ArrayList<>());
+                Utils.capitalizeFirstLetter(dto.getFirstName()),
+                Utils.capitalizeFirstLetter(dto.getLastName()),
+                dto.getEmail(), dto.getPhoneNumber(),
+                CustomAuthenticationProvider.getEncoder().encode(dto.getPassword()), roles, new ArrayList<>());
 
-        System.out.println("Saving new user [" + registrationDto.getEmail() + "]");
+        System.out.println("Saving new user [" + dto.getEmail() + "]");
         return repository.save(user);
     }
 
@@ -50,15 +48,7 @@ public class UserService {
         return user.get();
     }
 
-    /*
-    public User getByEmail (String email) {
-        User user = repository.findByEmail(email).get(0);
-        return user;
-    }*/
-
     public void update (User user, UserDto userDto) {
-        //User user = sessionService.getAuthUser();
-
         user.setEmail(userDto.getEmail());
         user.setPhoneNumber(userDto.getPhoneNumber());
         user.setFirstName(userDto.getFirstName());

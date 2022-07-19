@@ -6,6 +6,7 @@ import com.nlogax.banking.utils.CreditCardNumberGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -17,7 +18,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class Account {
 
-    public static String BIN_NUMBER = "423";    // todo use variable from bank.properties
+    @Value("${bank.bin_number:123}")    // todo properties value
+    public static String BIN_NUMBER;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
