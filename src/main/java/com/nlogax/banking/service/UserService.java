@@ -74,4 +74,13 @@ public class UserService {
         user.get().getAccounts().forEach(account -> account.setUser(null));
         repository.delete(user.get());
     }
+
+    public User findByEmail(String email) {
+        // todo exception handling
+        Optional<User> user = repository.findByEmail(email);
+        if (user.isEmpty())
+            throw new UserDoesntExistException();
+
+        return user.get();
+    }
 }

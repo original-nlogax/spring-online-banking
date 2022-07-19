@@ -3,7 +3,7 @@ package com.nlogax.banking.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.FORBIDDEN)
+@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 public class UserUnauthorizedException extends RuntimeException {
 
     public UserUnauthorizedException() {
