@@ -1,14 +1,12 @@
 package com.nlogax.banking.service;
 
+import com.nlogax.banking.dto.AccountDto;
 import com.nlogax.banking.exception.AccountDoesntExistException;
 import com.nlogax.banking.exception.AlreadyExistsException;
 import com.nlogax.banking.model.Account;
 import com.nlogax.banking.model.User;
 import com.nlogax.banking.repository.AccountRepository;
-import com.nlogax.banking.dto.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,6 +17,9 @@ public class AccountService  {
 
     @Autowired
     private AccountRepository repository;
+
+    @Autowired
+    private SessionService sessionService;
 
     public boolean existsById (Long id) {
         return repository.existsById(id);
@@ -50,8 +51,7 @@ public class AccountService  {
             throw new AlreadyExistsException();
         }
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) auth.getPrincipal();
+        User user = sessionService.getAuthUser();
 
         Account account;
         account = new Account(user, accountDto.getName(), accountDto.getCurrency());
