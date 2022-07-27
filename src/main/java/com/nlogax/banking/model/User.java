@@ -30,22 +30,15 @@ public class User {
     private boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    // adding user_id in user_roles which will reference this user's id
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
                 inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
-    //If you are like me in the initial days of learning and wrapping your head around the concept
-    // of using the @OneToMany annotation with the 'mappedBy' property, it also means that the other
-    // side holding the @ManyToOne annotation with the @JoinColumn is the 'owner'
-    // of this bi-directional relationship.
     @JsonManagedReference
     @Fetch(value = FetchMode.SUBSELECT) // bug: https://stackoverflow.com/a/8309458
     @OneToMany(targetEntity=com.nlogax.banking.model.Account.class, mappedBy = "user", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)  // todo why does EAGER crashes?
     private Collection<Account> accounts;
 
-
-    // ? maybe autogenerate
     public <T> User(String firstName, String lastName, String email, String phoneNumber, String password, List<Role> roles, List<Account> accounts) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -63,11 +56,6 @@ public class User {
                 .anyMatch((role) -> role.getName().equals("ROLE_ADMIN"));
     }
 
-
-    // from UsernamePasswordAuthenticationToken doc:
-    // The principal and credentials should be set with an Object that provides the respective property via
-    // its Object.toString() method. The simplest such Object to use is String.
-    // ( we need it in CustomAuthenticationProvider )
     @Override
     public String toString () {
         return getEmail();

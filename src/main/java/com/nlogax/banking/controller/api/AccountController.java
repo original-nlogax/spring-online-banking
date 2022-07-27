@@ -19,11 +19,6 @@ public class AccountController {
     @Autowired
     AccountService service;
 
-    /*
-    @HeadMapping(path="/{id}")
-    public ResponseEntity<Void> exists (@PathVariable Long id) {
-        return service.exists(id) ? ok().build() : notFound().build();
-    }*/
 
     @Secured("ROLE_ADMIN")
     @GetMapping(value = "/{id}")

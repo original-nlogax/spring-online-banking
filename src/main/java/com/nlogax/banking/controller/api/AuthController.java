@@ -17,16 +17,9 @@ public class AuthController {
     @Autowired
     SessionService sessionService;
 
-    @GetMapping(path = "/user") /*, produces = MediaType.APPLICATION_JSON_VALUE*/
+    @GetMapping(path = "/user")
     public ResponseEntity<User> getAuthUser() {
         User user = sessionService.getAuthUser();
         return ok(user);
     }
-
-
-
-    /*
-    public static boolean can (boolean ) {
-
-    }*/
 }

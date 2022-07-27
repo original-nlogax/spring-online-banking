@@ -25,7 +25,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  // todo why does EAGER crashes?
+    //@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)  // todo
     @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;

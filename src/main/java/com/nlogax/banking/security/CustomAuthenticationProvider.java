@@ -21,18 +21,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     UserService userService;
 
-    /*
-    @Autowired
-    PasswordEncoder encoder;
-    @PostConstruct
-    private void init () {
-        encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-    @Bean
-    public PasswordEncoder getPasswordEncoder () {
-        return encoder;
-    }*/
-
     private static final PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
     public static PasswordEncoder getEncoder() {

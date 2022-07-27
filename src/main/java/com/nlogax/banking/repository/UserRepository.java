@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    // works, because JpaRepository gets a field with exact name "email" from db
     Optional<User> findByEmail(String email);
 }

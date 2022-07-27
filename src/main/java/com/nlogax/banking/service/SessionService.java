@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class SessionService {
 
-    // todo maybe make static? and remove injections
     public User getAuthUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null)

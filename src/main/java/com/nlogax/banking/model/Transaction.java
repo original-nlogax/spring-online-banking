@@ -32,6 +32,7 @@ public class Transaction {
         this.currency = currency;
     }
 
+    /*
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,5 +57,5 @@ public class Transaction {
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
         return result;
-    }
+    }*/
 }

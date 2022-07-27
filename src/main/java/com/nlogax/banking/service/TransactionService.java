@@ -71,19 +71,7 @@ public class TransactionService {
         if (transactionDto.getId() != null) {
             throw new AlreadyExistsException();
         }
-
-        /*
-        if (sessionService.getAuthUser().isAdmin() && transactionDto.getNumberFrom().equals("MONEY PRINTER")) {
-            Account printTo = accountService.getByNumber(transactionDto.getNumberTo());
-            Transaction transaction = new Transaction(
-                    ZonedDateTime.now(), "MONEY PRINTER", printTo.getNumber(),
-                    transactionDto.getAmount(), Currency.USD
-            );
-            printTo.deposit(transactionDto.getAmount());
-            repository.save(transaction);
-            return transaction;
-        }*/
-
+        
         Account origin = accountService.getByNumber(transactionDto.getNumberFrom());
         Account destination = accountService.getByNumber(transactionDto.getNumberTo());
 
